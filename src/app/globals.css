@@ -1,8 +1,141 @@
 @import "tailwindcss";
 
+body {
+  font-family: var(--font-cabinet), Arial, sans-serif;
+}
+
+.font-cabinet {
+  font-family: var(--font-cabinet), Arial, sans-serif;
+}
+
+.font-neima {
+  font-family: var(--font-neima), "Times New Roman", serif;
+}
+
 /* Overlay de grain simple, discret */
 .noise-overlay {
   background-image: radial-gradient(circle, rgba(0, 0, 0, 0.12) 1px, transparent 1px);
   background-size: 3px 3px;
   mix-blend-mode: soft-light;
 }
+
+.site-invert {
+  filter: invert(1);
+}
+
+.bust-blur-mask {
+  --spot-x: 50%;
+  --spot-y: 50%;
+  --spot-inner: clamp(54px, 8.5vw, 120px);
+  --spot-outer: clamp(165px, 24vw, 320px);
+  background: rgba(253, 242, 233, 0.08);
+  -webkit-backdrop-filter: blur(14px) saturate(90%);
+  backdrop-filter: blur(14px) saturate(90%);
+  -webkit-mask-image: radial-gradient(
+    circle at var(--spot-x) var(--spot-y),
+    transparent 0,
+    transparent var(--spot-inner),
+    rgba(0, 0, 0, 0.45) calc(var(--spot-inner) + 32px),
+    rgba(0, 0, 0, 0.9) var(--spot-outer),
+    black calc(var(--spot-outer) + 52px)
+  );
+  mask-image: radial-gradient(
+    circle at var(--spot-x) var(--spot-y),
+    transparent 0,
+    transparent var(--spot-inner),
+    rgba(0, 0, 0, 0.45) calc(var(--spot-inner) + 32px),
+    rgba(0, 0, 0, 0.9) var(--spot-outer),
+    black calc(var(--spot-outer) + 52px)
+  );
+}
+
+.app-cross-cursor {
+  --cursor-x: 50%;
+  --cursor-y: 50%;
+  --cross-size: 56px;
+  --cross-thickness: 0.45px;
+  --cross-dot-size: 6px;
+  opacity: 1;
+  transition: opacity 0.2s ease-out;
+}
+
+.app-cross-cursor::before,
+.app-cross-cursor::after {
+  content: "";
+  position: absolute;
+  left: var(--cursor-x);
+  top: var(--cursor-y);
+  width: var(--cross-size);
+  height: var(--cross-size);
+  transform: translate(-50%, -50%);
+  transition: width 0.18s ease, height 0.18s ease;
+}
+
+.app-cross-cursor::before {
+  z-index: 2;
+  background:
+    radial-gradient(circle, #d50000 0 62%, transparent 70%) center / var(--cross-dot-size) var(--cross-dot-size) no-repeat,
+    linear-gradient(
+      to right,
+      transparent calc(50% - var(--cross-thickness)),
+      #000000 calc(50% - var(--cross-thickness)),
+      #000000 calc(50% + var(--cross-thickness)),
+      transparent calc(50% + var(--cross-thickness))
+    ),
+    linear-gradient(
+      to bottom,
+      transparent calc(50% - var(--cross-thickness)),
+      #000000 calc(50% - var(--cross-thickness)),
+      #000000 calc(50% + var(--cross-thickness)),
+      transparent calc(50% + var(--cross-thickness))
+    );
+}
+
+.app-cross-cursor::after {
+  z-index: 1;
+  background:
+    linear-gradient(
+      to right,
+      transparent calc(50% - var(--cross-thickness)),
+      #ffffff calc(50% - var(--cross-thickness)),
+      #ffffff calc(50% + var(--cross-thickness)),
+      transparent calc(50% + var(--cross-thickness))
+    ),
+    linear-gradient(
+      to bottom,
+      transparent calc(50% - var(--cross-thickness)),
+      #ffffff calc(50% - var(--cross-thickness)),
+      #ffffff calc(50% + var(--cross-thickness)),
+      transparent calc(50% + var(--cross-thickness))
+    );
+  opacity: 0.45;
+  filter: blur(0.35px);
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.app-cross-cursor.is-active::before,
+.app-cross-cursor.is-active::after {
+  width: 72px;
+  height: 72px;
+}
+
+.app-cross-cursor.is-hidden {
+  opacity: 0;
+}
+
+@media (pointer: fine) {
+  html,
+  body,
+  body *,
+  body *::before,
+  body *::after {
+    cursor: none !important;
+  }
+}
+
+@media (pointer: coarse) {
+  .app-cross-cursor {
+    display: none;
+  }
+}
+
