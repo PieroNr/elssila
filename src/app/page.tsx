@@ -3,6 +3,7 @@
 
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import Header from "@/components/layout/Header";
+import ScrollIndicator from "@/components/layout/ScrollIndicator";
 import { cabinet, neima } from "@/lib/fonts";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
@@ -159,7 +160,7 @@ export default function Home() {
         <div ref={cursorRef} className="app-cross-cursor is-hidden pointer-events-none absolute inset-0 z-[60]" />
 
         {/* GRAIN / NOISE OVERLAY */}
-        <div className="pointer-events-none absolute inset-0 z-5 opacity-25 noise-overlay" />
+        <div className="pointer-events-none absolute inset-0 z-5 opacity-20 noise-overlay" />
 
         {/* LOADER PLEIN ÉCRAN AVEC FADE OUT */}
         {showLoader && (
@@ -277,6 +278,14 @@ export default function Home() {
         >
           Dark mode {isDarkMode ? "ON" : "OFF"}
         </button>
+
+        <ScrollIndicator visible={!showLoader} />
+
+        <div
+          className={`${cabinet.className} pointer-events-none fixed bottom-20 right-6 z-[70] text-[10px] uppercase tracking-[0.28em] text-black/45`}
+        >
+          ISO 400
+        </div>
       </main>
   );
 }
