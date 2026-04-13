@@ -1,5 +1,75 @@
 @import "tailwindcss";
 
+/* ─── Design tokens ──────────────────────────────────────────────────────────
+   Registered via @theme so Tailwind utilities (bg-page, text-fg, etc.) resolve
+   through CSS custom properties. Dark-mode overrides below win via cascade.
+   ────────────────────────────────────────────────────────────────────────── */
+@theme {
+  /* Surfaces */
+  --color-page:       #fdf2e9;
+  --color-card:       #fdf2e9;
+  --color-card-hover: #f5e8d8;
+
+  /* Foreground / text hierarchy – warm brownish-red base */
+  --color-fg:   #482C2A;   /* primary   */
+  --color-fg-2: #6e4b49;   /* secondary */
+  --color-fg-3: #9e7c7a;   /* muted     */
+  --color-fg-4: #c8aeac;   /* subtle    */
+
+  /* Accent (orange) */
+  --color-accent:       #d9772c;
+  --color-accent-hover: #c36722;
+  --color-accent-vivid: #f97316;
+}
+
+/* Additional raw vars – rgba values don't work reliably inside @theme */
+:root {
+  --color-blur-tint:       rgba(253, 242, 233, 0.08);
+  --color-hero-glow:       rgba(255, 255, 255, 0.55);
+  --color-separator:       rgba(72, 44, 42, 0.70);
+  --color-cursor-line:     #482C2A;
+  --color-cursor-line-alt: #f5eeed;
+}
+
+/* ─── Dark theme ─────────────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --color-page:       #030D16;
+  --color-card:       #071929;
+  --color-card-hover: #0c2238;
+
+  /* Foreground – cool blue-gray base */
+  --color-fg:   #B7D3D5;
+  --color-fg-2: #8fb5b8;
+  --color-fg-3: #5a8a8e;
+  --color-fg-4: #3a6e72;
+
+  /* Accent → deep red */
+  --color-accent:       #c22234;
+  --color-accent-hover: #a51c2b;
+  --color-accent-vivid: #e02840;
+
+  --color-blur-tint:       rgba(3, 13, 22, 0.08);
+  --color-hero-glow:       rgba(3, 13, 22, 0.55);
+  --color-separator:       rgba(183, 211, 213, 0.35);
+  --color-cursor-line:     #B7D3D5;
+  --color-cursor-line-alt: #030D16;
+}
+
+/* ─── Theme-change transition ────────────────────────────────────────────────
+   Applied only during the switch (via JS), so hover/focus transitions are
+   never slowed down during normal interaction.
+   ────────────────────────────────────────────────────────────────────────── */
+html[data-theme-animating],
+html[data-theme-animating] *,
+html[data-theme-animating] *::before,
+html[data-theme-animating] *::after {
+  transition:
+    background-color 0.35s ease,
+    color 0.35s ease,
+    border-color 0.35s ease !important;
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────── */
 body {
   font-family: var(--font-cabinet), Arial, sans-serif;
 }
@@ -12,7 +82,7 @@ body {
   font-family: var(--font-neima), "Times New Roman", serif;
 }
 
-/* Overlay de grain simple, discret */
+/* ─── Grain overlay ──────────────────────────────────────────────────────── */
 .noise-overlay {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
   background-size: 220px 220px;
@@ -20,16 +90,13 @@ body {
   mix-blend-mode: difference;
 }
 
-.site-invert {
-  filter: invert(1);
-}
-
+/* ─── Blur spotlight mask ────────────────────────────────────────────────── */
 .bust-blur-mask {
   --spot-x: 50%;
   --spot-y: 50%;
   --spot-inner: clamp(54px, 8.5vw, 120px);
   --spot-outer: clamp(165px, 24vw, 320px);
-  background: rgba(253, 242, 233, 0.08);
+  background: var(--color-blur-tint);
   -webkit-backdrop-filter: blur(14px) saturate(90%);
   backdrop-filter: blur(14px) saturate(90%);
   -webkit-mask-image: radial-gradient(
@@ -50,6 +117,7 @@ body {
   );
 }
 
+/* ─── Cross cursor ───────────────────────────────────────────────────────── */
 .app-cross-cursor {
   --cursor-x: 50%;
   --cursor-y: 50%;
@@ -79,15 +147,15 @@ body {
     linear-gradient(
       to right,
       transparent calc(50% - var(--cross-thickness)),
-      #000000 calc(50% - var(--cross-thickness)),
-      #000000 calc(50% + var(--cross-thickness)),
+      var(--color-cursor-line) calc(50% - var(--cross-thickness)),
+      var(--color-cursor-line) calc(50% + var(--cross-thickness)),
       transparent calc(50% + var(--cross-thickness))
     ),
     linear-gradient(
       to bottom,
       transparent calc(50% - var(--cross-thickness)),
-      #000000 calc(50% - var(--cross-thickness)),
-      #000000 calc(50% + var(--cross-thickness)),
+      var(--color-cursor-line) calc(50% - var(--cross-thickness)),
+      var(--color-cursor-line) calc(50% + var(--cross-thickness)),
       transparent calc(50% + var(--cross-thickness))
     );
 }
@@ -98,15 +166,15 @@ body {
     linear-gradient(
       to right,
       transparent calc(50% - var(--cross-thickness)),
-      #ffffff calc(50% - var(--cross-thickness)),
-      #ffffff calc(50% + var(--cross-thickness)),
+      var(--color-cursor-line-alt) calc(50% - var(--cross-thickness)),
+      var(--color-cursor-line-alt) calc(50% + var(--cross-thickness)),
       transparent calc(50% + var(--cross-thickness))
     ),
     linear-gradient(
       to bottom,
       transparent calc(50% - var(--cross-thickness)),
-      #ffffff calc(50% - var(--cross-thickness)),
-      #ffffff calc(50% + var(--cross-thickness)),
+      var(--color-cursor-line-alt) calc(50% - var(--cross-thickness)),
+      var(--color-cursor-line-alt) calc(50% + var(--cross-thickness)),
       transparent calc(50% + var(--cross-thickness))
     );
   opacity: 0.45;
@@ -139,4 +207,3 @@ body {
     display: none;
   }
 }
-

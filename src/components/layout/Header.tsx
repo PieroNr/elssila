@@ -8,6 +8,7 @@ import { cabinet, neima } from "@/lib/fonts";
 const navLinks = [
   { label: "Projects", href: "/projects" },
   { label: "Services", href: "/services" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function Header() {
@@ -16,7 +17,7 @@ export default function Header() {
   return (
     <div className="pb-2">
       <header className="flex items-center justify-between">
-        <Link href="/" className={`${neima.className} text-2xl uppercase`}>
+        <Link href="/" className={`${neima.className} text-2xl uppercase text-fg`}>
           Elssila
         </Link>
 
@@ -28,13 +29,11 @@ export default function Header() {
                 key={href}
                 href={href}
                 className={`transition-colors ${
-                  isActive
-                    ? "text-slate-900"
-                    : "text-slate-500 hover:text-slate-900"
+                  isActive ? "text-fg" : "text-fg-3 hover:text-fg"
                 }`}
               >
                 {isActive && (
-                  <span className="mr-1.5 inline-block h-1 w-1 rounded-full bg-[#d9772c] align-middle" />
+                  <span className="mr-1.5 inline-block h-1 w-1 rounded-full bg-accent align-middle" />
                 )}
                 {label}
               </Link>
@@ -43,7 +42,7 @@ export default function Header() {
         </nav>
       </header>
 
-      <div className="mx-auto mt-4 h-[0.5px] w-full bg-black/70" />
+      <div className="mx-auto mt-4 h-[0.5px] w-full bg-[var(--color-separator)]" />
     </div>
   );
 }

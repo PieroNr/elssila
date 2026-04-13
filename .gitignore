@@ -4,3 +4,7 @@ node_modules/
 .next/
 
 package-lock.json
+
+.claude/worktrees/nifty-franklin
+
+tsconfig.tsbuildinfo

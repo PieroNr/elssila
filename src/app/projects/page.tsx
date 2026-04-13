@@ -42,68 +42,60 @@ const projects = [
 
 export default function ProjectsPage() {
   return (
-    <main className="relative min-h-screen bg-[#fdf2e9] text-slate-900 overflow-hidden">
-      {/* GRAIN OVERLAY */}
+    <main className="relative min-h-screen bg-page text-fg overflow-hidden">
+      {/* Grain overlay */}
       <div className="pointer-events-none fixed inset-0 z-5 opacity-20 noise-overlay" />
 
       <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col px-6 py-4">
         <Header />
 
-        {/* PAGE CONTENT */}
         <section className="flex-1 pt-16 pb-24">
-          {/* Titre de section */}
           <div className="mb-16 flex items-end justify-between">
             <h1 className={`${neima.className} text-6xl md:text-8xl tracking-tight leading-none`}>
               Projects
             </h1>
-            <p className={`${cabinet.className} text-[0.65rem] tracking-[0.3em] uppercase text-slate-400 mb-2`}>
+            <p className={`${cabinet.className} text-[0.65rem] tracking-[0.3em] uppercase text-fg-3 mb-2`}>
               {projects.length} travaux sélectionnés
             </p>
           </div>
 
-          {/* Liste des projets */}
-          <div className="divide-y divide-black/10">
+          <div className="divide-y divide-fg/10">
             {projects.map((project) => (
               <div
                 key={project.id}
-                className="group flex items-center justify-between gap-6 py-7 cursor-pointer transition-colors hover:bg-black/[0.02] -mx-3 px-3"
+                className="group flex items-center justify-between gap-6 py-7 cursor-pointer transition-colors hover:bg-fg/[0.02] -mx-3 px-3"
               >
-                {/* Numéro */}
-                <span className={`${cabinet.className} w-8 shrink-0 text-[0.6rem] tracking-[0.25em] text-slate-400`}>
+                <span className={`${cabinet.className} w-8 shrink-0 text-[0.6rem] tracking-[0.25em] text-fg-3`}>
                   {project.id}
                 </span>
 
-                {/* Titre */}
                 <div className="flex-1">
-                  <h2 className={`${neima.className} text-2xl md:text-3xl tracking-tight transition-colors group-hover:text-[#d9772c]`}>
+                  <h2 className={`${neima.className} text-2xl md:text-3xl tracking-tight transition-colors group-hover:text-accent`}>
                     {project.title}
                   </h2>
                 </div>
 
-                {/* Tags */}
                 <div className="hidden md:flex gap-2">
                   {project.tags.map((tag) => (
                     <span
                       key={tag}
-                      className={`${cabinet.className} border border-black/15 px-2.5 py-1 text-[0.55rem] uppercase tracking-[0.2em] text-slate-500`}
+                      className={`${cabinet.className} border border-fg/15 px-2.5 py-1 text-[0.55rem] uppercase tracking-[0.2em] text-fg-2`}
                     >
                       {tag}
                     </span>
                   ))}
                 </div>
 
-                {/* Catégorie + Année */}
                 <div className="flex flex-col items-end shrink-0">
-                  <span className={`${cabinet.className} text-[0.65rem] tracking-[0.2em] uppercase text-slate-500`}>
+                  <span className={`${cabinet.className} text-[0.65rem] tracking-[0.2em] uppercase text-fg-2`}>
                     {project.category}
                   </span>
-                  <span className={`${cabinet.className} text-[0.6rem] tracking-[0.15em] text-slate-400`}>
+                  <span className={`${cabinet.className} text-[0.6rem] tracking-[0.15em] text-fg-3`}>
                     {project.year}
                   </span>
                 </div>
 
-                {/* Flèche */}
-                <span className="shrink-0 text-slate-300 transition-transform group-hover:translate-x-1 group-hover:text-[#d9772c]">
+                <span className="shrink-0 text-fg-4 transition-transform group-hover:translate-x-1 group-hover:text-accent">
                   →
                 </span>
               </div>
