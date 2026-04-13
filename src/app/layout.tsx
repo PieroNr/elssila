@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { cabinet, neima } from "@/lib/fonts";
+import CustomCursor from "@/components/layout/CustomCursor";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,6 +18,7 @@ export default function RootLayout({
       <body
         className={`${cabinet.variable} ${neima.variable} font-cabinet antialiased`}
       >
+        <CustomCursor />
         {children}
       </body>
     </html>

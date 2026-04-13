@@ -22,7 +22,6 @@ export default function Home() {
   const [hasHydrated, setHasHydrated] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
   const blurMaskRef = useRef<HTMLDivElement>(null);
-  const cursorRef = useRef<HTMLDivElement>(null);
   const pointerTarget = useRef({ x: 0, y: 0 });
   const pointerCurrent = useRef({ x: 0, y: 0 });
 
@@ -64,7 +63,6 @@ export default function Home() {
     const setSpotToCenter = () => {
       const host = mainRef.current;
       const mask = blurMaskRef.current;
-      const cursor = cursorRef.current;
       if (!host || !mask) return;
 
       const rect = host.getBoundingClientRect();
@@ -74,10 +72,6 @@ export default function Home() {
       pointerCurrent.current = { x: centerX, y: centerY };
       mask.style.setProperty("--spot-x", `${centerX}px`);
       mask.style.setProperty("--spot-y", `${centerY}px`);
-      if (cursor) {
-        cursor.style.setProperty("--cursor-x", `${centerX}px`);
-        cursor.style.setProperty("--cursor-y", `${centerY}px`);
-      }
     };
 
     setSpotToCenter();
@@ -86,16 +80,11 @@ export default function Home() {
     let rafId = 0;
     const tick = () => {
       const mask = blurMaskRef.current;
-      const cursor = cursorRef.current;
       if (mask) {
         pointerCurrent.current.x += (pointerTarget.current.x - pointerCurrent.current.x) * 0.18;
         pointerCurrent.current.y += (pointerTarget.current.y - pointerCurrent.current.y) * 0.18;
         mask.style.setProperty("--spot-x", `${pointerCurrent.current.x}px`);
         mask.style.setProperty("--spot-y", `${pointerCurrent.current.y}px`);
-        if (cursor) {
-          cursor.style.setProperty("--cursor-x", `${pointerCurrent.current.x}px`);
-          cursor.style.setProperty("--cursor-y", `${pointerCurrent.current.y}px`);
-        }
       }
       rafId = requestAnimationFrame(tick);
     };
@@ -111,38 +100,23 @@ export default function Home() {
   const handlePointerMove = (event: ReactPointerEvent<HTMLElement>) => {
     const host = mainRef.current;
     if (!host) return;
-
     const rect = host.getBoundingClientRect();
     pointerTarget.current = {
       x: event.clientX - rect.left,
       y: event.clientY - rect.top,
     };
-
-    const target = event.target as HTMLElement | null;
-    const isClickable = Boolean(
-      target?.closest("a, button, [role='button'], input, select, textarea, label, [data-clickable='true']")
-    );
-    cursorRef.current?.classList.toggle("is-active", isClickable);
-    cursorRef.current?.classList.remove("is-hidden");
   };
 
   const handlePointerLeave = () => {
     const host = mainRef.current;
     if (!host) return;
-
     const rect = host.getBoundingClientRect();
     pointerTarget.current = { x: rect.width / 2, y: rect.height / 2 };
-    cursorRef.current?.classList.add("is-hidden");
-  };
-
-  const handlePointerEnter = () => {
-    cursorRef.current?.classList.remove("is-hidden");
   };
 
   return (
       <main
         ref={mainRef}
-        onPointerEnter={handlePointerEnter}
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
         className={`custom-cursor-host relative min-h-screen bg-[#fdf2e9] text-slate-900 overflow-hidden transition-[filter] duration-300 ${isDarkMode ? "site-invert" : ""}`}
@@ -155,9 +129,6 @@ export default function Home() {
 
         {/* Filtre de flou sur la 3D avec fenêtre nette autour du curseur */}
         <div ref={blurMaskRef} className="bust-blur-mask pointer-events-none absolute inset-0 z-[2]" />
-
-        {/* Curseur custom en croix */}
-        <div ref={cursorRef} className="app-cross-cursor is-hidden pointer-events-none absolute inset-0 z-[60]" />
 
         {/* GRAIN / NOISE OVERLAY */}
         <div className="pointer-events-none absolute inset-0 z-5 opacity-20 noise-overlay" />
