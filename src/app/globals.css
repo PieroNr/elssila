@@ -117,6 +117,34 @@ body {
   );
 }
 
+/* ─── Blob section blur mask ─────────────────────────────────────────────── */
+/* Same reveal mechanic as bust-blur-mask but positioned relative to its     */
+/* containing block (absolute, not fixed). Slightly tighter inner radius.    */
+.blob-blur-mask {
+  --spot-x: 50%;
+  --spot-y: 50%;
+  --spot-inner: clamp(48px, 7vw, 100px);
+  --spot-outer: clamp(140px, 20vw, 280px);
+  -webkit-backdrop-filter: blur(18px) saturate(85%);
+  backdrop-filter: blur(18px) saturate(85%);
+  -webkit-mask-image: radial-gradient(
+    circle at var(--spot-x) var(--spot-y),
+    transparent 0,
+    transparent var(--spot-inner),
+    rgba(0, 0, 0, 0.5) calc(var(--spot-inner) + 28px),
+    rgba(0, 0, 0, 0.92) var(--spot-outer),
+    black calc(var(--spot-outer) + 44px)
+  );
+  mask-image: radial-gradient(
+    circle at var(--spot-x) var(--spot-y),
+    transparent 0,
+    transparent var(--spot-inner),
+    rgba(0, 0, 0, 0.5) calc(var(--spot-inner) + 28px),
+    rgba(0, 0, 0, 0.92) var(--spot-outer),
+    black calc(var(--spot-outer) + 44px)
+  );
+}
+
 /* ─── Cross cursor ───────────────────────────────────────────────────────── */
 .app-cross-cursor {
   --cursor-x: 50%;

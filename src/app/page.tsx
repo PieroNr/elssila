@@ -13,7 +13,8 @@ const BustScene = dynamic<{ animate: boolean; wireframeColor: string; isDark: bo
   () => import("@/components/three/BustScene")
 );
 
-const ShowreelSection = dynamic(() => import("@/components/ShowreelSection"), { ssr: false });
+const ShowreelSection  = dynamic(() => import("@/components/ShowreelSection"),  { ssr: false });
+const ProjectsSection  = dynamic(() => import("@/components/ProjectsSection"),  { ssr: false });
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -248,6 +249,9 @@ export default function Home() {
 
       {/* SHOWREEL SECTION */}
       <ShowreelSection />
+
+      {/* PROJECTS SECTION */}
+      <ProjectsSection />
 
       {/* Theme toggle */}
       <button
