@@ -71,7 +71,7 @@ function AnimatedBlob({
   const groupRef = useRef<THREE.Group>(null);
 
   // detail=6 → 81 920 faces; deformation runs entirely on GPU
-  const geo = useMemo(() => new THREE.IcosahedronGeometry(1, 6), []);
+  const geo = useMemo(() => new THREE.IcosahedronGeometry(1, 12), []);
 
   // Standard material with vertex-shader injection for blob deformation
   const mat = useMemo(() => {
@@ -192,7 +192,7 @@ export default function BlobScene({ wireframeColor, isDark }: BlobSceneProps) {
         baseScale={2.5}
         speed={0.38}
         seed={0}
-        amplitude={0.46}
+        amplitude={1}
         noiseFreq={0.88}
         rotAxis={[0.3, 1, 0.15]}
         rotSpeed={0.05}
@@ -207,7 +207,7 @@ export default function BlobScene({ wireframeColor, isDark }: BlobSceneProps) {
         baseScale={3.3}
         speed={0.28}
         seed={137}
-        amplitude={0.44}
+        amplitude={1}
         noiseFreq={0.84}
         rotAxis={[-0.15, 1, 0.35]}
         rotSpeed={0.04}
