@@ -37,24 +37,56 @@ export default function CustomCursor() {
     };
 
     let rafId = 0;
-    const tick = () => {
-      pointerCurrent.current.x += (pointerTarget.current.x - pointerCurrent.current.x) * 0.18;
-      pointerCurrent.current.y += (pointerTarget.current.y - pointerCurrent.current.y) * 0.18;
-      cursor.style.setProperty("--cursor-x", `${pointerCurrent.current.x}px`);
-      cursor.style.setProperty("--cursor-y", `${pointerCurrent.current.y}px`);
+    let running = false;
+
+    const startRAF = () => {
+      if (running || document.hidden) return;
+      running = true;
       rafId = requestAnimationFrame(tick);
     };
-    rafId = requestAnimationFrame(tick);
 
-    document.addEventListener("pointermove", handlePointerMove);
+    const tick = () => {
+      const dx = pointerTarget.current.x - pointerCurrent.current.x;
+      const dy = pointerTarget.current.y - pointerCurrent.current.y;
+      pointerCurrent.current.x += dx * 0.18;
+      pointerCurrent.current.y += dy * 0.18;
+      cursor.style.setProperty("--cursor-x", `${pointerCurrent.current.x}px`);
+      cursor.style.setProperty("--cursor-y", `${pointerCurrent.current.y}px`);
+      // Stop once converged (< 0.5 px remaining)
+      if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) {
+        running = false;
+        return;
+      }
+      rafId = requestAnimationFrame(tick);
+    };
+
+    const handleVisibility = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(rafId);
+        running = false;
+      } else {
+        startRAF();
+      }
+    };
+
+    // Wrap original pointermove to also restart RAF after convergence/hide
+    const handlePointerMoveWithRAF = (event: PointerEvent) => {
+      handlePointerMove(event);
+      startRAF();
+    };
+
+    startRAF();
+    document.addEventListener("pointermove", handlePointerMoveWithRAF);
     document.addEventListener("pointerleave", handlePointerLeave);
     document.addEventListener("pointerenter", handlePointerEnter);
+    document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
       cancelAnimationFrame(rafId);
-      document.removeEventListener("pointermove", handlePointerMove);
+      document.removeEventListener("pointermove", handlePointerMoveWithRAF);
       document.removeEventListener("pointerleave", handlePointerLeave);
       document.removeEventListener("pointerenter", handlePointerEnter);
+      document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, []);
 

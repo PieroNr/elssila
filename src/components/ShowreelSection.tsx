@@ -12,6 +12,9 @@ export default function ShowreelSection({ src = "" }: ShowreelSectionProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const [playing, setPlaying] = useState(true);
+  // Ref mirrors playing state so the IntersectionObserver callback reads the
+  // latest value without being listed as an effect dependency (avoids loop).
+  const playingRef = useRef(true);
 
   const isInView = useInView(sectionRef, { once: true, margin: "-10%" });
 
@@ -24,8 +27,9 @@ export default function ShowreelSection({ src = "" }: ShowreelSectionProps) {
       ([entry]) => {
         if (!entry.isIntersecting) {
           video.pause();
+          playingRef.current = false;
           setPlaying(false);
-        } else if (playing) {
+        } else if (playingRef.current) {
           void video.play();
         }
       },
@@ -34,16 +38,19 @@ export default function ShowreelSection({ src = "" }: ShowreelSectionProps) {
 
     observer.observe(video);
     return () => observer.disconnect();
-  }, [src, playing]);
+    // Only re-create the observer when the video source changes
+  }, [src]);
 
   const togglePlay = () => {
     const video = videoRef.current;
     if (!video || !src) return;
     if (video.paused) {
       void video.play();
+      playingRef.current = true;
       setPlaying(true);
     } else {
       video.pause();
+      playingRef.current = false;
       setPlaying(false);
     }
   };

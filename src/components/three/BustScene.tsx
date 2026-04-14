@@ -3,7 +3,7 @@
 
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, OrbitControls, useGLTF } from "@react-three/drei";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useMemo } from "react";
 import * as THREE from "three";
 import type { Group, Mesh } from "three";
 
@@ -15,7 +15,7 @@ type BustSceneProps = {
 
 function BustWireframe({ color, isDark }: { color: string; isDark: boolean }) {
   const group = useRef<Group>(null);
-  const { scene } = useGLTF("/models/bust.glb");
+  const { scene } = useGLTF("/models/bust-compressed.glb");
 
   useEffect(() => {
     scene.traverse((child) => {
@@ -53,18 +53,17 @@ function BustWireframe({ color, isDark }: { color: string; isDark: boolean }) {
   );
 }
 
-useGLTF.preload("/models/bust.glb");
+useGLTF.preload("/models/bust-compressed.glb");
 
 export default function BustScene({ animate, wireframeColor = "#ff9349", isDark = false }: BustSceneProps) {
+  const canvasStyle = useMemo(
+    () => ({ width: "100%", height: "100%", opacity: animate ? 1 : 0, transition: "opacity 0.8s ease-out" }),
+    [animate]
+  );
   return (
     <Canvas
       camera={{ position: [0, 0.4, 1.7], fov: 42 }}
-      style={{
-        width: "100%",
-        height: "100%",
-        opacity: animate ? 1 : 0,
-        transition: "opacity 0.8s ease-out",
-      }}
+      style={canvasStyle}
     >
       {isDark ? (
         /* Dark — HDRI très atténué + lumières douces pour ne pas blanchir le bleu */

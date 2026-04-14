@@ -1,7 +1,7 @@
 // src/app/page.tsx
 "use client";
 
-import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import Header from "@/components/layout/Header";
 import ScrollIndicator from "@/components/layout/ScrollIndicator";
 import { cabinet, neima } from "@/lib/fonts";
@@ -24,6 +24,8 @@ export default function Home() {
   const heroSentinelRef = useRef<HTMLDivElement>(null);
   const pointerTarget = useRef({ x: 0, y: 0 });
   const pointerCurrent = useRef({ x: 0, y: 0 });
+  // Ref to the spotlight RAF restart fn so pointer-move can wake it up
+  const startSpotlightRef = useRef<(() => void) | null>(null);
 
   const { theme, toggle } = useTheme();
   const wireframeColor = theme === "dark" ? "#2391ff" : "#ff6a00";
@@ -46,13 +48,40 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
-  // Blur spotlight – follows the cursor with lerp
+  // Blur spotlight – follows the cursor with lerp.
+  // RAF is suspended when the tab is hidden and when the lerp has converged.
   useEffect(() => {
-    const setSpotToCenter = () => {
-      const host = mainRef.current;
-      const mask = blurMaskRef.current;
-      if (!host || !mask) return;
+    let rafId = 0;
+    let running = false;
 
+    const startRAF = () => {
+      if (running || document.hidden) return;
+      running = true;
+      rafId = requestAnimationFrame(tick);
+    };
+    startSpotlightRef.current = startRAF;
+
+    const tick = () => {
+      const mask = blurMaskRef.current;
+      if (mask) {
+        const dx = pointerTarget.current.x - pointerCurrent.current.x;
+        const dy = pointerTarget.current.y - pointerCurrent.current.y;
+        pointerCurrent.current.x += dx * 0.18;
+        pointerCurrent.current.y += dy * 0.18;
+        mask.style.setProperty("--spot-x", `${pointerCurrent.current.x}px`);
+        mask.style.setProperty("--spot-y", `${pointerCurrent.current.y}px`);
+        // Stop RAF once the lerp has converged (< 0.5 px remaining)
+        if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) {
+          running = false;
+          return;
+        }
+      }
+      rafId = requestAnimationFrame(tick);
+    };
+
+    const setSpotToCenter = () => {
+      const mask = blurMaskRef.current;
+      if (!mask) return;
       const cx = window.innerWidth / 2;
       const cy = window.innerHeight / 2;
       pointerTarget.current = { x: cx, y: cy };
@@ -61,41 +90,45 @@ export default function Home() {
       mask.style.setProperty("--spot-y", `${cy}px`);
     };
 
-    setSpotToCenter();
-    window.addEventListener("resize", setSpotToCenter);
-
-    let rafId = 0;
-    const tick = () => {
-      const mask = blurMaskRef.current;
-      if (mask) {
-        pointerCurrent.current.x += (pointerTarget.current.x - pointerCurrent.current.x) * 0.18;
-        pointerCurrent.current.y += (pointerTarget.current.y - pointerCurrent.current.y) * 0.18;
-        mask.style.setProperty("--spot-x", `${pointerCurrent.current.x}px`);
-        mask.style.setProperty("--spot-y", `${pointerCurrent.current.y}px`);
-      }
-      rafId = requestAnimationFrame(tick);
+    // Debounced resize handler (200 ms)
+    let resizeTimer = 0;
+    const handleResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(setSpotToCenter, 200);
     };
-    rafId = requestAnimationFrame(tick);
+
+    const handleVisibility = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(rafId);
+        running = false;
+      } else {
+        startRAF();
+      }
+    };
+
+    setSpotToCenter();
+    startRAF();
+    window.addEventListener("resize", handleResize);
+    document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
       cancelAnimationFrame(rafId);
-      window.removeEventListener("resize", setSpotToCenter);
+      clearTimeout(resizeTimer);
+      startSpotlightRef.current = null;
+      window.removeEventListener("resize", handleResize);
+      document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, []);
 
-  const handlePointerMove = (event: ReactPointerEvent<HTMLElement>) => {
-    pointerTarget.current = {
-      x: event.clientX,
-      y: event.clientY,
-    };
-  };
+  const handlePointerMove = useCallback((event: ReactPointerEvent<HTMLElement>) => {
+    pointerTarget.current = { x: event.clientX, y: event.clientY };
+    startSpotlightRef.current?.();
+  }, []);
 
-  const handlePointerLeave = () => {
-    pointerTarget.current = {
-      x: window.innerWidth / 2,
-      y: window.innerHeight / 2,
-    };
-  };
+  const handlePointerLeave = useCallback(() => {
+    pointerTarget.current = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    startSpotlightRef.current?.();
+  }, []);
 
   return (
     <main
