@@ -5,9 +5,10 @@ import Lottie from "lottie-react";
 
 type ScrollIndicatorProps = {
   visible: boolean;
+  isDark?: boolean;
 };
 
-export default function ScrollIndicator({ visible }: ScrollIndicatorProps) {
+export default function ScrollIndicator({ visible, isDark = false }: ScrollIndicatorProps) {
   const [animationData, setAnimationData] = useState<object | null>(null);
 
   useEffect(() => {
@@ -37,7 +38,8 @@ export default function ScrollIndicator({ visible }: ScrollIndicatorProps) {
           animationData={animationData}
           loop
           autoplay
-          className="h-16 w-16 sm:h-20 sm:w-20"
+          className="h-36 w-36 sm:h-44 sm:w-44"
+          style={{ filter: isDark ? "brightness(0) invert(1)" : "none" }}
           rendererSettings={{ preserveAspectRatio: "xMidYMid meet" }}
         />
       )}

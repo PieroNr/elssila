@@ -42,7 +42,7 @@ function BustWireframe({ color, isDark }: { color: string; isDark: boolean }) {
 
   useFrame((_, delta) => {
     if (group.current) {
-      group.current.rotation.y += delta * 0.15;
+      group.current.rotation.y += delta * 0.07;
     }
   });
 
@@ -58,7 +58,7 @@ useGLTF.preload("/models/bust.glb");
 export default function BustScene({ animate, wireframeColor = "#ff9349", isDark = false }: BustSceneProps) {
   return (
     <Canvas
-      camera={{ position: [0, 0.7, 2.4], fov: 30 }}
+      camera={{ position: [0, 0.4, 1.7], fov: 42 }}
       style={{
         width: "100%",
         height: "100%",

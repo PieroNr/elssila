@@ -17,11 +17,11 @@ export default function Header() {
   return (
     <div className="pb-2">
       <header className="flex items-center justify-between">
-        <Link href="/" className={`${neima.className} text-2xl uppercase text-fg`}>
+        <Link href="/" className={`${neima.className} text-2xl uppercase italic text-fg`}>
           Elssila
         </Link>
 
-        <nav className={`${cabinet.className} flex gap-8 text-base font-medium tracking-[0.16em] uppercase`}>
+        <nav className={`${cabinet.className} flex gap-8 text-xs font-medium tracking-[0.16em] uppercase`}>
           {navLinks.map(({ label, href }) => {
             const isActive = pathname === href;
             return (
