@@ -1,108 +1,56 @@
-// src/app/projects/page.tsx
 import Header from "@/components/layout/Header";
-import { cabinet, neima } from "@/lib/fonts";
+import Footer from "@/components/layout/Footer";
+import ArchiveTable from "@/components/projects/ArchiveTable";
+import { projects } from "@/data/projects";
 
-const projects = [
-  {
-    id: "01",
-    title: "Void Campaign",
-    category: "Brand Identity",
-    year: "2025",
-    tags: ["Direction artistique", "Motion"],
-  },
-  {
-    id: "02",
-    title: "Solstice Editorial",
-    category: "Editorial",
-    year: "2025",
-    tags: ["Photographie", "Layout"],
-  },
-  {
-    id: "03",
-    title: "NOMA Manifesto",
-    category: "Digital Experience",
-    year: "2024",
-    tags: ["3D", "Web"],
-  },
-  {
-    id: "04",
-    title: "Rift Collection",
-    category: "Fashion",
-    year: "2024",
-    tags: ["Direction artistique", "Vidéo"],
-  },
-  {
-    id: "05",
-    title: "Archive III",
-    category: "Installation",
-    year: "2023",
-    tags: ["Scénographie", "Print"],
-  },
-];
+export const metadata = {
+  title: "Index — Elssila Studio",
+  description:
+    "Tous les travaux du studio depuis sa fondation. Filtrer, trier, ouvrir — comme on feuillette un registre.",
+};
 
 export default function ProjectsPage() {
   return (
-    <main className="relative min-h-screen bg-page text-fg overflow-hidden">
-      {/* Grain overlay */}
+    <main className="relative min-h-screen overflow-hidden bg-page text-fg">
       <div className="pointer-events-none fixed inset-0 z-5 opacity-20 noise-overlay" />
 
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col px-6 py-4">
+      <div className="relative z-10 mx-auto flex max-w-6xl flex-col px-6 py-4">
         <Header />
 
-        <section className="flex-1 pt-16 pb-24">
-          <div className="mb-16 flex items-end justify-between">
-            <h1 className={`${neima.className} text-6xl md:text-8xl tracking-tight leading-none`}>
-              Projects
-            </h1>
-            <p className={`${cabinet.className} text-[0.65rem] tracking-[0.3em] uppercase text-fg-3 mb-2`}>
-              {projects.length} travaux sélectionnés
-            </p>
+        <section className="pt-12 pb-32">
+          <div className="flex items-baseline justify-between">
+            <div className="micro text-fg-3">⌗ Archive · 2019 → 2025</div>
+            <div className="micro font-mono-ui text-fg-3">
+              {projects.length} ENTRIES · INDEX_24
+            </div>
           </div>
+          <div className="hairline mt-3" />
 
-          <div className="divide-y divide-fg/10">
-            {projects.map((project) => (
-              <div
-                key={project.id}
-                className="group flex items-center justify-between gap-6 py-7 cursor-pointer transition-colors hover:bg-fg/[0.02] -mx-3 px-3"
-              >
-                <span className={`${cabinet.className} w-8 shrink-0 text-[0.6rem] tracking-[0.25em] text-fg-3`}>
-                  {project.id}
-                </span>
+          <h1 className="font-display mt-12 text-6xl leading-none tracking-tight md:text-9xl">
+            <span className="italic-display">Index</span>
+            <span className="text-accent">.</span>
+          </h1>
+          <p className="font-display mt-6 max-w-xl text-lg leading-snug text-fg-2 md:text-xl">
+            Tous les travaux du studio depuis sa fondation. Filtrer, trier, ouvrir —
+            comme on feuillette un registre.
+          </p>
 
-                <div className="flex-1">
-                  <h2 className={`${neima.className} text-2xl md:text-3xl tracking-tight transition-colors group-hover:text-accent`}>
-                    {project.title}
-                  </h2>
-                </div>
+          <ArchiveTable />
 
-                <div className="hidden md:flex gap-2">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className={`${cabinet.className} border border-fg/15 px-2.5 py-1 text-[0.55rem] uppercase tracking-[0.2em] text-fg-2`}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="flex flex-col items-end shrink-0">
-                  <span className={`${cabinet.className} text-[0.65rem] tracking-[0.2em] uppercase text-fg-2`}>
-                    {project.category}
-                  </span>
-                  <span className={`${cabinet.className} text-[0.6rem] tracking-[0.15em] text-fg-3`}>
-                    {project.year}
-                  </span>
-                </div>
-
-                <span className="shrink-0 text-fg-4 transition-transform group-hover:translate-x-1 group-hover:text-accent">
-                  →
-                </span>
-              </div>
-            ))}
+          <div className="mt-12 flex flex-wrap items-center justify-between gap-6">
+            <div className="micro text-fg-3">End of index · Pre-2019 sur demande</div>
+            <button
+              type="button"
+              className="micro border px-6 py-3 text-fg transition-colors hover:border-fg hover:bg-fg hover:text-page"
+              style={{ borderColor: "var(--color-separator)" }}
+            >
+              Télécharger le registre PDF ↓
+            </button>
           </div>
         </section>
       </div>
+
+      <Footer />
     </main>
   );
 }

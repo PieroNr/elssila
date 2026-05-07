@@ -82,6 +82,37 @@ body {
   font-family: var(--font-neima), "Times New Roman", serif;
 }
 
+/* ─── Typography utilities (mirror tokens used in design mocks) ─────────── */
+.font-display {
+  font-family: var(--font-neima), "Times New Roman", serif;
+  letter-spacing: -0.01em;
+}
+.italic-display {
+  font-family: var(--font-neima), "Times New Roman", serif;
+  font-style: italic;
+  letter-spacing: -0.005em;
+}
+.font-mono-ui {
+  font-family: ui-monospace, "SF Mono", "Roboto Mono", Consolas, monospace;
+}
+.micro {
+  font-family: var(--font-cabinet), Arial, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+.micro-sm {
+  font-family: var(--font-cabinet), Arial, sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+.hairline {
+  height: 0.5px;
+  background: var(--color-separator);
+  width: 100%;
+}
+
 /* ─── Grain overlay ──────────────────────────────────────────────────────── */
 .noise-overlay {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
@@ -90,65 +121,67 @@ body {
   mix-blend-mode: difference;
 }
 
-/* ─── Blur spotlight mask ────────────────────────────────────────────────── */
-.bust-blur-mask {
-  --spot-x: 50%;
-  --spot-y: 50%;
-  --spot-inner: clamp(54px, 8.5vw, 120px);
-  --spot-outer: clamp(165px, 24vw, 320px);
-  background: var(--color-blur-tint);
-  -webkit-backdrop-filter: blur(14px) saturate(90%);
-  backdrop-filter: blur(14px) saturate(90%);
-  -webkit-mask-image: radial-gradient(
-    circle at var(--spot-x) var(--spot-y),
-    transparent 0,
-    transparent var(--spot-inner),
-    rgba(0, 0, 0, 0.45) calc(var(--spot-inner) + 32px),
-    rgba(0, 0, 0, 0.9) var(--spot-outer),
-    black calc(var(--spot-outer) + 52px)
-  );
-  mask-image: radial-gradient(
-    circle at var(--spot-x) var(--spot-y),
-    transparent 0,
-    transparent var(--spot-inner),
-    rgba(0, 0, 0, 0.45) calc(var(--spot-inner) + 32px),
-    rgba(0, 0, 0, 0.9) var(--spot-outer),
-    black calc(var(--spot-outer) + 52px)
-  );
+/* ─── Page transition panels ──────────────────────────────────────────────
+   8 vertical panels fall in (scaleY 0→1, origin top), then retract upward
+   (scaleY 1→0, origin bottom). All transforms are GPU-composited.          */
+.page-panels {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+}
+.page-panel {
+  background: var(--color-fg);
+  transform: scaleY(0);
+  animation:
+    panelIn 0.7s cubic-bezier(0.7, 0, 0.3, 1) forwards,
+    panelOut 0.7s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+}
+@keyframes panelIn {
+  from { transform: scaleY(0); transform-origin: top; }
+  to   { transform: scaleY(1); transform-origin: top; }
+}
+@keyframes panelOut {
+  from { transform: scaleY(1); transform-origin: bottom; }
+  to   { transform: scaleY(0); transform-origin: bottom; }
 }
 
-/* ─── Blob section blur mask ─────────────────────────────────────────────── */
-/* Same reveal mechanic as bust-blur-mask but positioned relative to its     */
-/* containing block (absolute, not fixed). Slightly tighter inner radius.    */
-.blob-blur-mask {
-  --spot-x: 50%;
-  --spot-y: 50%;
-  --spot-inner: clamp(48px, 7vw, 100px);
-  --spot-outer: clamp(140px, 20vw, 280px);
-  -webkit-backdrop-filter: blur(18px) saturate(85%);
-  backdrop-filter: blur(18px) saturate(85%);
-  -webkit-mask-image: radial-gradient(
-    circle at var(--spot-x) var(--spot-y),
-    transparent 0,
-    transparent var(--spot-inner),
-    rgba(0, 0, 0, 0.5) calc(var(--spot-inner) + 28px),
-    rgba(0, 0, 0, 0.92) var(--spot-outer),
-    black calc(var(--spot-outer) + 44px)
-  );
-  mask-image: radial-gradient(
-    circle at var(--spot-x) var(--spot-y),
-    transparent 0,
-    transparent var(--spot-inner),
-    rgba(0, 0, 0, 0.5) calc(var(--spot-inner) + 28px),
-    rgba(0, 0, 0, 0.92) var(--spot-outer),
-    black calc(var(--spot-outer) + 44px)
-  );
+/* ─── Marquee track ──────────────────────────────────────────────────────── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 36s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+  .page-panel    { animation: none; transform: scaleY(0); }
 }
 
-/* ─── Cross cursor ───────────────────────────────────────────────────────── */
+/* ─── Cross cursor ─────────────────────────────────────────────────────────
+   --cursor-x / --cursor-y are declared with @property so the browser knows
+   they're <length> values. This lets it composite the transform on the GPU
+   without re-running layout or paint when the variable changes — essential
+   for staying smooth while the WebGL Canvas renders on the home page.       */
+@property --cursor-x {
+  syntax: "<length>";
+  initial-value: 0px;
+  inherits: true;
+}
+@property --cursor-y {
+  syntax: "<length>";
+  initial-value: 0px;
+  inherits: true;
+}
+
 .app-cross-cursor {
-  --cursor-x: 50%;
-  --cursor-y: 50%;
+  --cursor-x: 0px;
+  --cursor-y: 0px;
   --cross-size: 56px;
   --cross-thickness: 0.45px;
   --cross-dot-size: 6px;
@@ -160,12 +193,13 @@ body {
 .app-cross-cursor::after {
   content: "";
   position: absolute;
-  left: var(--cursor-x);
-  top: var(--cursor-y);
+  left: 0;
+  top: 0;
   width: var(--cross-size);
   height: var(--cross-size);
-  transform: translate(-50%, -50%);
+  transform: translate3d(var(--cursor-x), var(--cursor-y), 0) translate(-50%, -50%);
   transition: width 0.18s ease, height 0.18s ease;
+  will-change: transform;
 }
 
 .app-cross-cursor::before {

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { cabinet, neima } from "@/lib/fonts";
 import { ThemeProvider } from "@/lib/theme";
 import CustomCursor from "@/components/layout/CustomCursor";
@@ -7,6 +7,12 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Elssila Studio",
   description: "Creative Production Studio",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

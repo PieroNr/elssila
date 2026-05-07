@@ -1,0 +1,153 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import dynamic from "next/dynamic";
+import { useState } from "react";
+import { featuredProjects } from "@/data/projects";
+import { useTheme } from "@/lib/theme";
+import { useLiteMode } from "@/lib/lite-mode";
+
+const KnotScene = dynamic(() => import("@/components/three/KnotScene"), { ssr: false });
+
+// Hard-coded spans replicate the mock layout (4 columns, 4 cells).
+const SPANS: { gridColumn: string; gridRow: string }[] = [
+  { gridColumn: "span 2", gridRow: "span 2" },
+  { gridColumn: "span 2", gridRow: "span 1" },
+  { gridColumn: "span 2", gridRow: "span 1" },
+  { gridColumn: "span 2", gridRow: "span 2" },
+];
+
+export default function HomeProjects() {
+  const { theme } = useTheme();
+  const lite = useLiteMode();
+  const [hoverSlug, setHoverSlug] = useState<string | null>(null);
+
+  const wireframeColor = theme === "dark" ? "#3aa9ff" : "#ff8a3a";
+  const projects = featuredProjects.slice(0, 4);
+
+  return (
+    <section className="relative overflow-hidden px-6 py-32 md:px-16">
+      {/* KnotScene — desktop only, behind content */}
+      {!lite && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute right-[-100px] top-10 z-0 hidden h-[620px] w-[620px] opacity-70 md:block"
+        >
+          <KnotScene wireframeColor={wireframeColor} />
+        </div>
+      )}
+      <div className="micro-sm font-mono-ui absolute right-20 top-24 z-[1] hidden text-right text-fg-3 md:block">
+        ⌗ OBJ_03
+        <br />
+        TORUS · p2 q3
+      </div>
+
+      <div className="relative z-[1] mx-auto max-w-6xl">
+        <div className="flex items-baseline justify-between">
+          <span className="micro text-fg-3">⌗ Selected Work</span>
+          <span className="micro text-fg-3">04 / 24 · Index</span>
+        </div>
+        <div className="hairline mt-3" />
+
+        <div className="mt-10 flex items-end justify-between">
+          <h2
+            className="font-display"
+            style={{ fontSize: "clamp(64px, 9vw, 128px)", lineHeight: 0.92, letterSpacing: "-0.02em", margin: 0 }}
+          >
+            Projects<span className="text-accent">.</span>
+          </h2>
+          <Link href="/projects" className="micro pb-3 text-fg-2 transition-colors hover:text-accent">
+            All projects →
+          </Link>
+        </div>
+
+        {/* Asymmetric grid — desktop */}
+        <div
+          className="mt-14 hidden p-px md:grid"
+          style={{
+            background: "var(--color-separator)",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gridAutoRows: "200px",
+            gap: 2,
+          }}
+        >
+          {projects.map((p, i) => {
+            const span = SPANS[i] ?? SPANS[SPANS.length - 1];
+            const isActive = hoverSlug === p.slug;
+            const isOther = hoverSlug !== null && !isActive;
+            return (
+              <Link
+                key={p.slug}
+                href={`/projects/${p.slug}`}
+                onMouseEnter={() => setHoverSlug(p.slug)}
+                onMouseLeave={() => setHoverSlug(null)}
+                className="group relative block overflow-hidden bg-card transition-opacity duration-500"
+                style={{ ...span, opacity: isOther ? 0.32 : 1 }}
+              >
+                <Image
+                  src={p.hero.src}
+                  alt={p.hero.alt}
+                  fill
+                  sizes="(min-width: 1280px) 50vw, 80vw"
+                  className="object-cover transition-transform duration-700 ease-out"
+                  style={{ transform: isActive ? "scale(1.04)" : "scale(1)" }}
+                />
+                <div className="pointer-events-none absolute inset-0 opacity-15 noise-overlay" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+
+                <div className="micro-sm font-mono-ui pointer-events-none absolute top-3.5 right-4 text-white/70">
+                  №{p.ref}
+                </div>
+
+                <div className="pointer-events-none absolute right-4 bottom-4 left-4 text-white">
+                  <div
+                    className="italic-display transition-[font-size] duration-500"
+                    style={{ fontSize: isActive ? 38 : 22, lineHeight: 1 }}
+                  >
+                    {p.title}
+                  </div>
+                  <div className="micro-sm mt-1.5 text-white/85">
+                    {p.category} · {p.year}
+                  </div>
+                </div>
+
+                <div
+                  className="micro-sm font-mono-ui pointer-events-none absolute top-3.5 left-4 bg-accent px-2 py-1 text-white transition-[opacity,transform] duration-300"
+                  style={{
+                    opacity: isActive ? 1 : 0,
+                    transform: isActive ? "translateY(0)" : "translateY(-6px)",
+                  }}
+                >
+                  ↗ Open
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Mobile stack */}
+        <div className="mt-14 flex flex-col gap-3 md:hidden">
+          {projects.map((p) => (
+            <Link
+              key={p.slug}
+              href={`/projects/${p.slug}`}
+              className="relative block aspect-[4/5] overflow-hidden"
+            >
+              <Image src={p.hero.src} alt={p.hero.alt} fill sizes="100vw" className="object-cover" />
+              <div className="pointer-events-none absolute inset-0 opacity-15 noise-overlay" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+              <div className="micro-sm font-mono-ui absolute top-3.5 right-4 text-white/70">№{p.ref}</div>
+              <div className="absolute right-4 bottom-4 left-4 text-white">
+                <div className="italic-display text-2xl leading-none">{p.title}</div>
+                <div className="micro-sm mt-1.5 text-white/85">
+                  {p.category} · {p.year}
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

@@ -1,9 +1,8 @@
-// src/components/three/BustScene.tsx
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, OrbitControls, useGLTF } from "@react-three/drei";
-import { useRef, useEffect, useMemo } from "react";
+import { useGLTF } from "@react-three/drei";
+import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import type { Group, Mesh } from "three";
 
@@ -13,41 +12,58 @@ type BustSceneProps = {
   isDark?: boolean;
 };
 
-function BustWireframe({ color, isDark }: { color: string; isDark: boolean }) {
+// Render the bust as edge-only line segments. EdgesGeometry filters by angle
+// (30°), keeping only structural ridges — far fewer segments than a native
+// wireframe, with a more editorial silhouette.
+function BustEdges({ color, animate }: { color: string; animate: boolean }) {
   const group = useRef<Group>(null);
   const { scene } = useGLTF("/models/bust-compressed.glb");
 
-  useEffect(() => {
+  // Build the edges scene once (per GLB load). Re-runs only if the source
+  // scene changes; color is updated separately to avoid re-traversal.
+  const { lineSegments, materials } = useMemo(() => {
+    const segments: THREE.LineSegments[] = [];
+    const mats: THREE.LineBasicMaterial[] = [];
     scene.traverse((child) => {
       if ((child as Mesh).isMesh) {
         const mesh = child as Mesh;
-        const mat = mesh.material;
-        if (mat instanceof THREE.MeshStandardMaterial && mat.wireframe) {
-          mat.color.set(color);
-          mat.roughness = isDark ? 0.65 : 1;
-          mat.envMapIntensity = isDark ? 0.25 : 1;
-          mat.needsUpdate = true;
-        } else {
-          mesh.material = new THREE.MeshStandardMaterial({
-            wireframe: true,
-            color,
-            roughness: isDark ? 0.65 : 1,
-            metalness: 0,
-            envMapIntensity: isDark ? 0.25 : 1,
-          });
-        }
+        const edges = new THREE.EdgesGeometry(mesh.geometry, 30);
+        const lineMat = new THREE.LineBasicMaterial({ color });
+        const lines = new THREE.LineSegments(edges, lineMat);
+        lines.position.copy(mesh.position);
+        lines.rotation.copy(mesh.rotation);
+        lines.scale.copy(mesh.scale);
+        mesh.visible = false;
+        mesh.parent?.add(lines);
+        segments.push(lines);
+        mats.push(lineMat);
       }
     });
-  }, [scene, color, isDark]);
+    return { lineSegments: segments, materials: mats };
+  }, [scene]);
+
+  useEffect(() => {
+    materials.forEach((m) => m.color.set(color));
+  }, [color, materials]);
+
+  useEffect(
+    () => () => {
+      lineSegments.forEach((ls) => {
+        ls.parent?.remove(ls);
+        ls.geometry.dispose();
+      });
+      materials.forEach((m) => m.dispose());
+    },
+    [lineSegments, materials],
+  );
 
   useFrame((_, delta) => {
-    if (group.current) {
-      group.current.rotation.y += delta * 0.07;
-    }
+    if (!animate || !group.current) return;
+    group.current.rotation.y += delta * 0.07;
   });
 
   return (
-    <group ref={group} position={[0, -0.8, 0]} scale={1.8}>
+    <group ref={group} position={[0, -0.45, 0]} scale={1.35}>
       <primitive object={scene} />
     </group>
   );
@@ -58,32 +74,20 @@ useGLTF.preload("/models/bust-compressed.glb");
 export default function BustScene({ animate, wireframeColor = "#ff9349", isDark = false }: BustSceneProps) {
   const canvasStyle = useMemo(
     () => ({ width: "100%", height: "100%", opacity: animate ? 1 : 0, transition: "opacity 0.8s ease-out" }),
-    [animate]
+    [animate],
   );
+
   return (
     <Canvas
       camera={{ position: [0, 0.4, 1.7], fov: 42 }}
+      dpr={[1, 1.5]}
+      gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}
       style={canvasStyle}
     >
-      {isDark ? (
-        /* Dark — HDRI très atténué + lumières douces pour ne pas blanchir le bleu */
-        <>
-          <ambientLight intensity={0.7} />
-          <directionalLight position={[-2, 3, 2]} intensity={0.6} />
-          <Environment preset="studio" environmentIntensity={0.12} />
-        </>
-      ) : (
-        /* Light — setup original : HDRI plein + 3 sources, orange vif et contrasté */
-        <>
-          <ambientLight intensity={0.6} />
-          <directionalLight position={[2, 4, 3]} intensity={1.1} />
-          <directionalLight position={[-3, -2, -2]} intensity={0.4} />
-          <Environment preset="studio" />
-        </>
-      )}
-
-      <BustWireframe color={wireframeColor} isDark={isDark} />
-      <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
+      <ambientLight intensity={isDark ? 0.7 : 0.6} />
+      <directionalLight position={[2, 4, 3]} intensity={isDark ? 0.6 : 1.1} />
+      {!isDark && <directionalLight position={[-3, -2, -2]} intensity={0.4} />}
+      <BustEdges color={wireframeColor} animate={animate} />
     </Canvas>
   );
 }

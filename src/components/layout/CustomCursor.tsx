@@ -1,13 +1,25 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const pointerTarget = useRef({ x: 0, y: 0 });
   const pointerCurrent = useRef({ x: 0, y: 0 });
+  // Only mount the cursor on devices that have a fine pointer (mouse/trackpad)
+  // and where the user hasn't asked for reduced motion. Touch devices and
+  // accessibility-conscious users get the native cursor instead.
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    const finePointer = window.matchMedia("(pointer: fine)").matches;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setEnabled(finePointer && !reducedMotion);
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
     const cursor = cursorRef.current;
     if (!cursor) return;
 
@@ -88,7 +100,9 @@ export default function CustomCursor() {
       document.removeEventListener("pointerenter", handlePointerEnter);
       document.removeEventListener("visibilitychange", handleVisibility);
     };
-  }, []);
+  }, [enabled]);
+
+  if (!enabled) return null;
 
   return (
     <div
