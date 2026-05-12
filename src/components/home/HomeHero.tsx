@@ -6,6 +6,18 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "@/lib/theme";
 import { useLiteMode } from "@/lib/lite-mode";
+import { Reveal } from "@/components/ui/Reveal";
+
+const heroContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.15 } },
+};
+const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
+
+const heroItem = {
+  hidden: { opacity: 0, y: 28, filter: "blur(12px)" },
+  visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.75, ease: EASE } },
+};
 
 const BustScene = dynamic<{ animate: boolean; wireframeColor: string; isDark: boolean }>(
   () => import("@/components/three/BustScene"),
@@ -65,11 +77,14 @@ export default function HomeHero({ ready, onPastHeroChange }: HomeHeroProps) {
             aria-hidden
             className="pointer-events-none absolute -inset-x-16 -inset-y-10 rounded-[999px] bg-[var(--color-hero-glow)] blur-3xl"
           />
-          <div className="relative">
+          <motion.div
+            className="relative"
+            variants={heroContainer}
+            initial="hidden"
+            animate={ready ? "visible" : "hidden"}
+          >
             <motion.h1
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: ready ? 1 : 0, y: ready ? 0 : 24 }}
-              transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
+              variants={heroItem}
               className="font-display tracking-tight"
               style={{ fontSize: "clamp(56px, 9vw, 128px)", lineHeight: 1.05, letterSpacing: "-0.02em", margin: 0 }}
             >
@@ -78,21 +93,11 @@ export default function HomeHero({ ready, onPastHeroChange }: HomeHeroProps) {
               PRODUCTION
             </motion.h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: ready ? 1 : 0, y: ready ? 0 : 16 }}
-              transition={{ duration: 0.6, ease: "easeOut", delay: 0.35 }}
-              className="micro mt-5 text-accent"
-            >
+            <motion.p variants={heroItem} className="micro mt-5 text-accent">
               Defining the visual edge of tomorrow
             </motion.p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: ready ? 1 : 0, y: ready ? 0 : 16 }}
-              transition={{ duration: 0.6, ease: "easeOut", delay: 0.5 }}
-              className="mt-10 flex flex-wrap justify-center gap-3.5"
-            >
+            <motion.div variants={heroItem} className="mt-10 flex flex-wrap justify-center gap-3.5">
               <Link
                 href="/projects"
                 className="bg-accent px-9 py-3.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-white transition-colors hover:bg-accent-hover"
@@ -106,7 +111,7 @@ export default function HomeHero({ ready, onPastHeroChange }: HomeHeroProps) {
                 Discutons-en
               </Link>
             </motion.div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Corner stamps */}
@@ -135,13 +140,13 @@ function Showreel() {
 
   return (
     <section className="relative">
-      <div className="mx-auto max-w-6xl px-6 pt-24">
+      <Reveal className="mx-auto max-w-6xl px-6 pt-24">
         <div className="flex items-baseline justify-between">
           <span className="micro text-fg-3">⌗ Showreel</span>
           <span className="micro text-fg-3">2025 · 02:47</span>
         </div>
         <div className="hairline mt-3" />
-      </div>
+      </Reveal>
 
       <div className="relative mt-6 aspect-video w-full overflow-hidden">
         <div

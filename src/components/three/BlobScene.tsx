@@ -1,6 +1,8 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
+import { Environment } from "@react-three/drei";
+
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
@@ -37,8 +39,8 @@ interface BlobProps {
 }
 
 function Blob({ color, position, baseScale, speed, seed }: BlobProps) {
-  // detail=5 → ~5 120 faces, light enough for two blobs without postprocessing.
-  const geo = useMemo(() => new THREE.IcosahedronGeometry(1, 5), []);
+  // detail=7 → ~20 480 faces, denser wireframe mesh while staying GPU-light.
+  const geo = useMemo(() => new THREE.IcosahedronGeometry(1, 12), []);
 
   const mat = useMemo(() => {
     const m = new THREE.MeshStandardMaterial({
@@ -117,8 +119,9 @@ export default function BlobScene({ wireframeColor }: BlobSceneProps) {
       style={{ width: "100%", height: "100%" }}
     >
       <ambientLight intensity={0.5} />
-      <pointLight position={[-6, 4, 4]} intensity={1.4} color={wireframeColor} distance={18} decay={2} />
-      <pointLight position={[6, -4, 4]} intensity={1.0} color={wireframeColor} distance={18} decay={2} />
+
+      <pointLight position={[-6, 4, 4]} intensity={7} color={wireframeColor} distance={18} decay={2} />
+      <pointLight position={[6, -4, 4]} intensity={10} color={wireframeColor} distance={18} decay={2} />
       <Blob color={wireframeColor} position={[-5.5, 2.4, -1]} baseScale={2.5} speed={0.38} seed={0} />
       <Blob color={wireframeColor} position={[6.5, -2.6, -0.5]} baseScale={3.2} speed={0.28} seed={137} />
     </Canvas>

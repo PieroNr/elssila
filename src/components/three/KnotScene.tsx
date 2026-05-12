@@ -84,7 +84,7 @@ function KnotMesh({ color }: { color: string }) {
 export default function KnotScene({ wireframeColor }: KnotSceneProps) {
   return (
     <Canvas
-      camera={{ position: [0, 0, 6], fov: 48 }}
+      camera={{ position: [0, 0, 6], fov: 58 }}
       dpr={[1, 1.5]}
       gl={{ alpha: true, antialias: true }}
       style={{ width: "100%", height: "100%" }}

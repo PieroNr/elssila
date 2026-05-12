@@ -121,32 +121,17 @@ body {
   mix-blend-mode: difference;
 }
 
-/* ─── Page transition panels ──────────────────────────────────────────────
-   8 vertical panels fall in (scaleY 0→1, origin top), then retract upward
-   (scaleY 1→0, origin bottom). All transforms are GPU-composited.          */
-.page-panels {
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  pointer-events: none;
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-}
-.page-panel {
-  background: var(--color-fg);
-  transform: scaleY(0);
+/* ─── Page transition overlay ─────────────────────────────────────────────
+   Single horizontal sweep: slides in from left, pauses, exits to right.
+   GPU-composited translateX — no layout/paint triggered.                   */
+.page-overlay {
+  background: var(--color-page);
   animation:
-    panelIn 0.7s cubic-bezier(0.7, 0, 0.3, 1) forwards,
-    panelOut 0.7s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+    sweepIn  0.48s cubic-bezier(0.76, 0, 0.24, 1) forwards,
+    sweepOut 0.48s cubic-bezier(0.76, 0, 0.24, 1) 0.52s forwards;
 }
-@keyframes panelIn {
-  from { transform: scaleY(0); transform-origin: top; }
-  to   { transform: scaleY(1); transform-origin: top; }
-}
-@keyframes panelOut {
-  from { transform: scaleY(1); transform-origin: bottom; }
-  to   { transform: scaleY(0); transform-origin: bottom; }
-}
+@keyframes sweepIn  { from { transform: translateX(-100%); } to { transform: translateX(0%); } }
+@keyframes sweepOut { from { transform: translateX(0%); }   to { transform: translateX(100%); } }
 
 /* ─── Marquee track ──────────────────────────────────────────────────────── */
 @keyframes marquee {
@@ -159,8 +144,8 @@ body {
   animation: marquee 36s linear infinite;
 }
 @media (prefers-reduced-motion: reduce) {
-  .marquee-track { animation: none; }
-  .page-panel    { animation: none; transform: scaleY(0); }
+  .marquee-track  { animation: none; }
+  .page-overlay   { animation: none; display: none; }
 }
 
 /* ─── Cross cursor ─────────────────────────────────────────────────────────

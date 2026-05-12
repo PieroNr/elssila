@@ -29,9 +29,9 @@ export default function Home() {
         <motion.div
           key="loader"
           className="fixed inset-0 z-40 flex flex-col items-center justify-center bg-page"
-          initial={{ opacity: 1 }}
-          animate={{ opacity: isLoading ? 1 : 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          initial={{ opacity: 1, filter: "blur(0px)" }}
+          animate={{ opacity: isLoading ? 1 : 0, filter: isLoading ? "blur(0px)" : "blur(8px)" }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           onAnimationComplete={() => {
             if (!isLoading) setShowLoader(false);
           }}
@@ -51,7 +51,7 @@ export default function Home() {
             <motion.div
               initial={{ x: "-100%" }}
               animate={{ x: "0%" }}
-              transition={{ duration: 1.4, ease: "easeInOut" }}
+              transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
               className="h-full w-full bg-accent-vivid"
             />
           </div>
@@ -71,15 +71,16 @@ export default function Home() {
       <HomeFooter />
 
       {/* Theme toggle */}
-      <button
+      <motion.button
         type="button"
         onClick={toggle}
         suppressHydrationWarning
         aria-label="Toggle theme"
+        whileTap={{ scale: 0.94 }}
         className={`${cabinet.className} fixed bottom-6 right-6 z-[70] border border-fg/60 bg-page/80 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-fg backdrop-blur-sm transition-colors hover:bg-fg hover:text-page`}
       >
         <span suppressHydrationWarning>{theme === "dark" ? "Light mode" : "Dark mode"}</span>
-      </button>
+      </motion.button>
 
       <ScrollIndicator visible={!showLoader && !pastHero} isDark={theme === "dark"} />
     </main>

@@ -3,17 +3,33 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useMemo, useState } from "react";
+import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { projects, PROJECT_CATEGORIES, type Project } from "@/data/projects";
 
 type SortKey = "year" | "title";
 
+const CARD_W = 300;
+const CARD_H = 430;
+
 // Tabular registry view of every project. Filter by category, sort by year/title,
-// hover a row to surface a floating preview card (desktop only).
+// hover a row to surface a cursor-following preview card (desktop only).
 
 export default function ArchiveTable() {
   const [filter, setFilter] = useState<string>("All");
   const [sort, setSort] = useState<SortKey>("year");
   const [hoverSlug, setHoverSlug] = useState<string | null>(null);
+
+  const rawX = useMotionValue(-500);
+  const rawY = useMotionValue(-500);
+  const cardX = useSpring(rawX, { stiffness: 150, damping: 22 });
+  const cardY = useSpring(rawY, { stiffness: 150, damping: 22 });
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const x = Math.min(e.clientX + 28, window.innerWidth - CARD_W - 8);
+    const y = Math.min(e.clientY + 28, window.innerHeight - CARD_H - 8);
+    rawX.set(x);
+    rawY.set(y);
+  };
 
   const list = useMemo<Project[]>(() => {
     let l =
@@ -90,7 +106,7 @@ export default function ArchiveTable() {
       </div>
 
       {/* Rows */}
-      <div>
+      <div onMouseMove={handleMouseMove}>
         {list.map((p) => (
           <Link
             key={p.slug}
@@ -141,42 +157,50 @@ export default function ArchiveTable() {
       </div>
 
       {/* Floating preview (desktop only) */}
-      {hovered && (
-        <aside
-          className="pointer-events-none fixed right-12 bottom-12 z-50 hidden w-[280px] bg-fg text-page shadow-2xl md:block"
-          aria-hidden
-        >
-          <div className="relative aspect-[4/5] w-full overflow-hidden">
-            <Image
-              src={hovered.hero.src}
-              alt=""
-              fill
-              sizes="280px"
-              className="object-cover"
-            />
-            <div className="pointer-events-none absolute inset-0 opacity-15 noise-overlay" />
-          </div>
-          <div className="p-4">
-            <div className="font-mono-ui text-[9px] tracking-[0.2em] opacity-60">
-              ▌ FILE_{hovered.ref} · {hovered.year}
+      <AnimatePresence mode="wait">
+        {hovered && (
+          <motion.aside
+            key={hovered.slug}
+            className="pointer-events-none fixed z-50 hidden w-[280px] bg-fg text-page shadow-2xl md:block"
+            aria-hidden
+            style={{ left: cardX, top: cardY }}
+            initial={{ opacity: 0, scale: 0.94, filter: "blur(8px)" }}
+            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+            exit={{ opacity: 0, scale: 0.94, filter: "blur(8px)" }}
+            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="relative aspect-[4/5] w-full overflow-hidden">
+              <Image
+                src={hovered.hero.src}
+                alt=""
+                fill
+                sizes="280px"
+                className="object-cover"
+              />
+              <div className="pointer-events-none absolute inset-0 opacity-15 noise-overlay" />
             </div>
-            <div className="font-display mt-2 text-xl leading-tight tracking-tight">
-              {hovered.title}
+            <div className="p-4">
+              <div className="font-mono-ui text-[9px] tracking-[0.2em] opacity-60">
+                ▌ FILE_{hovered.ref} · {hovered.year}
+              </div>
+              <div className="font-display mt-2 text-xl leading-tight tracking-tight">
+                {hovered.title}
+              </div>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {hovered.tags.slice(0, 3).map((t) => (
+                  <span
+                    key={t}
+                    className="micro-sm border px-1.5 py-0.5"
+                    style={{ borderColor: "rgba(253,242,233,0.25)" }}
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
             </div>
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              {hovered.tags.slice(0, 3).map((t) => (
-                <span
-                  key={t}
-                  className="micro-sm border px-1.5 py-0.5"
-                  style={{ borderColor: "rgba(253,242,233,0.25)" }}
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-          </div>
-        </aside>
-      )}
+          </motion.aside>
+        )}
+      </AnimatePresence>
     </>
   );
 }

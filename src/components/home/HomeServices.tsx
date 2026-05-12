@@ -2,9 +2,12 @@
 
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { services } from "@/data/services";
 import { useTheme } from "@/lib/theme";
 import { useLiteMode } from "@/lib/lite-mode";
+import { Reveal } from "@/components/ui/Reveal";
 
 const BlobScene = dynamic(() => import("@/components/three/BlobScene"), { ssr: false });
 
@@ -20,13 +23,24 @@ export default function HomeServices() {
   const { theme } = useTheme();
   const lite = useLiteMode();
   const wireframeColor = theme === "dark" ? "#2391ff" : "#ff6a00";
+  const sectionRef = useRef<HTMLElement>(null);
+  const [blobVisible, setBlobVisible] = useState(false);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => setBlobVisible(entry.isIntersecting), { rootMargin: "200px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   return (
     <section
+      ref={sectionRef}
       className="relative overflow-hidden border-t border-[var(--color-separator)] px-6 py-32 md:px-16"
     >
-      {/* Blob background */}
-      {!lite && (
+      {/* Blob background — mounted only when section is near viewport */}
+      {!lite && blobVisible && (
         <div aria-hidden className="pointer-events-none absolute inset-0 z-0 hidden opacity-85 md:block">
           <BlobScene wireframeColor={wireframeColor} isDark={theme === "dark"} />
         </div>
@@ -38,13 +52,15 @@ export default function HomeServices() {
       />
 
       <div className="relative z-[1] mx-auto max-w-6xl">
-        <div className="flex items-baseline justify-between">
-          <span className="micro text-fg-3">⌗ Capabilities</span>
-          <span className="micro text-fg-3">04 disciplines</span>
-        </div>
-        <div className="hairline mt-3" />
+        <Reveal>
+          <div className="flex items-baseline justify-between">
+            <span className="micro text-fg-3">⌗ Capabilities</span>
+            <span className="micro text-fg-3">04 disciplines</span>
+          </div>
+          <div className="hairline mt-3" />
+        </Reveal>
 
-        <div className="mt-10 flex items-end justify-between">
+        <Reveal delay={0.08} className="mt-10 flex items-end justify-between">
           <h2
             className="font-display"
             style={{ fontSize: "clamp(64px, 9vw, 128px)", lineHeight: 0.92, letterSpacing: "-0.02em", margin: 0 }}
@@ -55,11 +71,11 @@ export default function HomeServices() {
           <Link href="/services" className="micro pb-3 text-fg-2 transition-colors hover:text-accent">
             All services →
           </Link>
-        </div>
+        </Reveal>
 
         <ul className="mt-14">
           {services.map((s, i) => (
-            <li key={s.id} className={i === 0 ? "border-t border-[var(--color-separator)]" : undefined}>
+            <Reveal key={s.id} delay={i * 0.07} className={i === 0 ? "border-t border-[var(--color-separator)]" : undefined}>
               <Link
                 href="/services"
                 className="srow group grid items-baseline gap-8 border-b border-[var(--color-separator)] py-8 transition-[padding,background] duration-300"
@@ -88,14 +104,16 @@ export default function HomeServices() {
                   ))}
                 </div>
 
-                <span
+                <motion.span
                   aria-hidden
-                  className="text-xl text-fg-4 transition-[color,transform] duration-300 group-hover:translate-x-2 group-hover:text-accent"
+                  className="text-xl text-fg-4 transition-colors duration-300 group-hover:text-accent"
+                  whileHover={{ x: 8 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 >
                   →
-                </span>
+                </motion.span>
               </Link>
-            </li>
+            </Reveal>
           ))}
         </ul>
       </div>

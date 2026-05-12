@@ -3,10 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { featuredProjects } from "@/data/projects";
 import { useTheme } from "@/lib/theme";
 import { useLiteMode } from "@/lib/lite-mode";
+import { Reveal } from "@/components/ui/Reveal";
 
 const KnotScene = dynamic(() => import("@/components/three/KnotScene"), { ssr: false });
 
@@ -22,17 +24,27 @@ export default function HomeProjects() {
   const { theme } = useTheme();
   const lite = useLiteMode();
   const [hoverSlug, setHoverSlug] = useState<string | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const [knotVisible, setKnotVisible] = useState(false);
 
-  const wireframeColor = theme === "dark" ? "#3aa9ff" : "#ff8a3a";
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => setKnotVisible(entry.isIntersecting), { rootMargin: "200px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const wireframeColor = theme === "dark" ? "#2391ff" : "#ff6a00";
   const projects = featuredProjects.slice(0, 4);
 
   return (
-    <section className="relative overflow-hidden px-6 py-32 md:px-16">
-      {/* KnotScene — desktop only, behind content */}
-      {!lite && (
+    <section ref={sectionRef} className="relative overflow-hidden px-6 py-32 md:px-16">
+      {/* KnotScene — desktop only, behind content, mounted only when near viewport */}
+      {!lite && knotVisible && (
         <div
           aria-hidden
-          className="pointer-events-none absolute right-[-100px] top-10 z-0 hidden h-[620px] w-[620px] opacity-70 md:block"
+          className="pointer-events-none absolute right-[-60px] top-0 z-0 hidden h-[780px] w-[780px] opacity-70 md:block"
         >
           <KnotScene wireframeColor={wireframeColor} />
         </div>
@@ -44,13 +56,15 @@ export default function HomeProjects() {
       </div>
 
       <div className="relative z-[1] mx-auto max-w-6xl">
-        <div className="flex items-baseline justify-between">
-          <span className="micro text-fg-3">⌗ Selected Work</span>
-          <span className="micro text-fg-3">04 / 24 · Index</span>
-        </div>
-        <div className="hairline mt-3" />
+        <Reveal>
+          <div className="flex items-baseline justify-between">
+            <span className="micro text-fg-3">⌗ Selected Work</span>
+            <span className="micro text-fg-3">04 / 24 · Index</span>
+          </div>
+          <div className="hairline mt-3" />
+        </Reveal>
 
-        <div className="mt-10 flex items-end justify-between">
+        <Reveal delay={0.08} className="mt-10 flex items-end justify-between">
           <h2
             className="font-display"
             style={{ fontSize: "clamp(64px, 9vw, 128px)", lineHeight: 0.92, letterSpacing: "-0.02em", margin: 0 }}
@@ -60,7 +74,7 @@ export default function HomeProjects() {
           <Link href="/projects" className="micro pb-3 text-fg-2 transition-colors hover:text-accent">
             All projects →
           </Link>
-        </div>
+        </Reveal>
 
         {/* Asymmetric grid — desktop */}
         <div
