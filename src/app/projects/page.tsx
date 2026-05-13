@@ -1,5 +1,5 @@
 import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import { PageFooter } from "@/components/home/HomeFooter";
 import ArchiveTable from "@/components/projects/ArchiveTable";
 import { projects } from "@/data/projects";
 
@@ -50,7 +50,7 @@ export default function ProjectsPage() {
         </section>
       </div>
 
-      <Footer />
+      <PageFooter />
     </main>
   );
 }

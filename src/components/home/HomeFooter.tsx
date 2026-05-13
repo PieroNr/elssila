@@ -22,7 +22,7 @@ const STUDIO_LINKS: [string, string][] = [
 const NAV_LINKS: [string, string][] = [
   ["Projects", "/projects"],
   ["Services", "/services"],
-  ["Archive", "/projects"],
+  ["Studio", "/studio"],
   ["Contact", "/contact"],
 ];
 
@@ -35,15 +35,19 @@ const SOCIAL: [string, string][] = [
 
 const MARQUEE_ITEMS = ["Direction Artistique", "Photography", "Film", "Web&3D"];
 
-export default function HomeFooter() {
+export function PageFooter() {
+  return <HomeFooter showMarquee={false} />;
+}
+
+export default function HomeFooter({ showMarquee = true }: { showMarquee?: boolean }) {
   return (
     <footer
-      className="relative overflow-hidden pt-24 pb-8"
+      className="relative overflow-hidden pt-12 pb-6 md:pt-24 md:pb-8"
       style={{ background: BG, color: FG, borderTop: `0.5px solid ${FG_18}` }}
     >
-      {/* Mark top-right */}
+      {/* Mark top-right — hidden on small mobile to save space */}
       <div
-        className="micro-sm font-mono-ui absolute top-10 right-8 flex items-center gap-3 md:right-16"
+        className="micro-sm font-mono-ui absolute top-8 right-6 hidden items-center gap-3 sm:flex md:right-16"
         style={{ color: FG_45 }}
       >
         <span
@@ -61,13 +65,13 @@ export default function HomeFooter() {
         <div className="mt-3 h-[0.5px] w-full" style={{ background: FG_18 }} />
 
         <h3
-          className="font-display mt-8"
+          className="font-display mt-6 md:mt-8"
           style={{
-            fontSize: "clamp(56px, 8vw, 112px)",
+            fontSize: "clamp(40px, 8vw, 112px)",
             lineHeight: 0.95,
             letterSpacing: "-0.02em",
             maxWidth: 800,
-            margin: "32px 0 0",
+            margin: "24px 0 0",
           }}
         >
           Un projet,{" "}
@@ -77,60 +81,63 @@ export default function HomeFooter() {
           ?
         </h3>
 
-        <div className="mt-10 flex flex-wrap gap-3.5">
+        <div className="mt-7 flex flex-wrap gap-2.5 md:mt-10 md:gap-3.5">
           <Link
             href="/contact"
-            className="bg-accent px-9 py-3.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-white transition-colors hover:bg-accent-hover"
+            className="bg-accent px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-white transition-colors hover:bg-accent-hover md:px-9 md:py-3.5"
           >
             Démarrer un projet
           </Link>
           <a
             href="mailto:studio@elssila.com"
-            className="px-9 py-3.5 text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors"
+            className="px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors md:px-9 md:py-3.5"
             style={{ border: "1px solid rgba(255,255,255,0.4)", color: "#fff" }}
           >
             studio@elssila.com
           </a>
         </div>
 
-        {/* Columns */}
+        {/* Columns — on mobile: 2 cols (brand + nav), on desktop: 4 cols */}
         <div
-          className="mt-24 grid gap-12 pt-10 md:grid-cols-[1.2fr_1fr_1fr_1fr]"
+          className="mt-10 grid grid-cols-2 gap-8 pt-8 md:mt-24 md:grid-cols-[1.2fr_1fr_1fr_1fr] md:gap-12 md:pt-10"
           style={{ borderTop: `0.5px solid ${FG_18}` }}
         >
-          <div>
-            <div className="italic-display" style={{ fontSize: 32 }}>
+          {/* Brand col — full width on mobile */}
+          <div className="col-span-2 md:col-span-1">
+            <div className="italic-display" style={{ fontSize: 28 }}>
               Elssila
             </div>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed" style={{ color: FG_60 }}>
+            <p className="mt-2 text-sm leading-relaxed md:mt-3 md:max-w-xs" style={{ color: FG_60 }}>
               Studio de production créative indépendant.
-              <br />
               Direction artistique, image, expériences.
             </p>
-            <div
-              className="micro-sm font-mono-ui mt-6"
-              style={{ color: FG_40 }}
-            >
-              EST. 2019 · MMXXV
-              <br />
-              48.8566° N · 2.3522° E
+            <div className="micro-sm font-mono-ui mt-4 md:mt-6" style={{ color: FG_40 }}>
+              EST. 2019 · MMXXV · 48.8566° N
             </div>
           </div>
 
-          <FooterColumn label="Studio" items={STUDIO_LINKS} />
-          <FooterColumn label="Navigation" items={NAV_LINKS} />
+          {/* Navigation col — visible on mobile */}
+          <div className="md:hidden">
+            <div className="micro-sm mb-3" style={{ color: FG_40 }}>Navigation</div>
+            {NAV_LINKS.map(([l, h]) => (
+              <Link key={l} href={h} className="block py-1.5 text-sm transition-colors hover:text-white" style={{ color: "rgba(253,242,233,0.85)" }}>
+                {l}
+              </Link>
+            ))}
+          </div>
 
-          <div>
-            <div className="micro-sm mb-4" style={{ color: FG_40 }}>
-              Suivre
-            </div>
+          {/* Desktop-only extra cols */}
+          <div className="hidden md:block">
+            <FooterColumn label="Studio" items={STUDIO_LINKS} />
+          </div>
+          <div className="hidden md:block">
+            <FooterColumn label="Navigation" items={NAV_LINKS} />
+          </div>
+
+          <div className="hidden md:block">
+            <div className="micro-sm mb-4" style={{ color: FG_40 }}>Suivre</div>
             {SOCIAL.map(([k, v]) => (
-              <a
-                key={k}
-                href="#"
-                className="flex items-center justify-between py-2 text-sm"
-                style={{ color: FG, borderBottom: `0.5px solid ${FG_10}` }}
-              >
+              <a key={k} href="#" className="flex items-center justify-between py-2 text-sm" style={{ color: FG, borderBottom: `0.5px solid ${FG_10}` }}>
                 <span>{k}</span>
                 <span style={{ color: FG_45 }}>{v} ↗</span>
               </a>
@@ -138,36 +145,38 @@ export default function HomeFooter() {
           </div>
         </div>
 
-        {/* Marquee */}
-        <div
-          className="mt-16 overflow-hidden whitespace-nowrap py-8"
-          style={{ borderTop: `0.5px solid ${FG_18}`, borderBottom: `0.5px solid ${FG_18}` }}
-          aria-hidden
-        >
+        {/* Marquee — home only, desktop only */}
+        {showMarquee && (
           <div
-            className="marquee-track italic-display"
-            style={{ fontSize: 64, letterSpacing: "-0.02em", color: "rgba(253,242,233,0.85)" }}
+            className="mt-12 hidden overflow-hidden whitespace-nowrap py-8 md:mt-16 md:block"
+            style={{ borderTop: `0.5px solid ${FG_18}`, borderBottom: `0.5px solid ${FG_18}` }}
+            aria-hidden
           >
-            {Array.from({ length: 4 }).map((_, i) => (
-              <span key={i}>
-                {MARQUEE_ITEMS.map((m, j) => (
-                  <span key={m}>
-                    {m}{" "}
-                    <span style={{ color: "var(--color-accent-vivid)" }}>·</span>
-                    {j === MARQUEE_ITEMS.length - 1 ? " " : " "}
-                  </span>
-                ))}
-              </span>
-            ))}
+            <div
+              className="marquee-track italic-display"
+              style={{ fontSize: 64, letterSpacing: "-0.02em", color: "rgba(253,242,233,0.85)" }}
+            >
+              {Array.from({ length: 4 }).map((_, i) => (
+                <span key={i}>
+                  {MARQUEE_ITEMS.map((m, j) => (
+                    <span key={m}>
+                      {m}{" "}
+                      <span style={{ color: "var(--color-accent-vivid)" }}>·</span>
+                      {j === MARQUEE_ITEMS.length - 1 ? " " : " "}
+                    </span>
+                  ))}
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Bottom row */}
-        <div className="mt-8 flex flex-wrap justify-between gap-4">
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 md:mt-8 md:gap-4">
           <span className="micro-sm" style={{ color: FG_40 }}>
             © Elssila Studio · Tous droits réservés
           </span>
-          <span className="micro-sm font-mono-ui" style={{ color: FG_40 }}>
+          <span className="micro-sm font-mono-ui hidden md:inline" style={{ color: FG_40 }}>
             VOL. 01 · ISO 400 · v1.0
           </span>
           <span className="micro-sm" style={{ color: FG_40 }}>

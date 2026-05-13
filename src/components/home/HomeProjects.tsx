@@ -39,15 +39,18 @@ export default function HomeProjects() {
   const projects = featuredProjects.slice(0, 4);
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden px-6 py-32 md:px-16">
-      {/* KnotScene — desktop only, behind content, mounted only when near viewport */}
-      {!lite && knotVisible && (
-        <div
+    <section ref={sectionRef} className="relative overflow-hidden px-6 py-16 md:px-16 md:py-32">
+      {/* KnotScene — desktop only, behind content, fades in when section enters viewport */}
+      {!lite && (
+        <motion.div
           aria-hidden
-          className="pointer-events-none absolute right-[-60px] top-0 z-0 hidden h-[780px] w-[780px] opacity-70 md:block"
+          className="pointer-events-none absolute right-[-60px] top-0 z-0 hidden h-[780px] w-[780px] md:block"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: knotVisible ? 0.7 : 0 }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
         >
           <KnotScene wireframeColor={wireframeColor} />
-        </div>
+        </motion.div>
       )}
       <div className="micro-sm font-mono-ui absolute right-20 top-24 z-[1] hidden text-right text-fg-3 md:block">
         ⌗ OBJ_03
@@ -140,23 +143,20 @@ export default function HomeProjects() {
           })}
         </div>
 
-        {/* Mobile stack */}
-        <div className="mt-14 flex flex-col gap-3 md:hidden">
+        {/* Mobile: 2-column compact grid */}
+        <div className="mt-8 grid grid-cols-2 gap-2 md:hidden">
           {projects.map((p) => (
             <Link
               key={p.slug}
               href={`/projects/${p.slug}`}
-              className="relative block aspect-[4/5] overflow-hidden"
+              className="relative block aspect-square overflow-hidden"
             >
-              <Image src={p.hero.src} alt={p.hero.alt} fill sizes="100vw" className="object-cover" />
+              <Image src={p.hero.src} alt={p.hero.alt} fill sizes="50vw" className="object-cover" />
               <div className="pointer-events-none absolute inset-0 opacity-15 noise-overlay" />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
-              <div className="micro-sm font-mono-ui absolute top-3.5 right-4 text-white/70">№{p.ref}</div>
-              <div className="absolute right-4 bottom-4 left-4 text-white">
-                <div className="italic-display text-2xl leading-none">{p.title}</div>
-                <div className="micro-sm mt-1.5 text-white/85">
-                  {p.category} · {p.year}
-                </div>
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+              <div className="absolute right-2.5 bottom-2.5 left-2.5 text-white">
+                <div className="italic-display text-sm leading-none">{p.title}</div>
+                <div className="micro-sm mt-1 text-white/75">{p.year}</div>
               </div>
             </Link>
           ))}

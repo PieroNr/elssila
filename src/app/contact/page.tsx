@@ -2,7 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import { PageFooter } from "@/components/home/HomeFooter";
 import Clock from "@/components/contact/Clock";
 import SeismographLive from "@/components/contact/SeismographLive";
 
@@ -273,7 +273,7 @@ export default function ContactPage() {
         </section>
       </div>
 
-      <Footer />
+      <PageFooter />
     </main>
   );
 }

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import { PageFooter } from "@/components/home/HomeFooter";
 import Manifesto from "@/components/studio/Manifesto";
 import MarqueeBand from "@/components/studio/MarqueeBand";
 import Approach from "@/components/studio/Approach";
@@ -28,7 +28,7 @@ export default function StudioPage() {
       <TeamGrid />
       <Recognitions />
 
-      <Footer />
+      <PageFooter />
     </main>
   );
 }

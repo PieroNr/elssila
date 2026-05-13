@@ -25,8 +25,10 @@ export default function ArchiveTable() {
   const cardY = useSpring(rawY, { stiffness: 150, damping: 22 });
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    const x = Math.min(e.clientX + 28, window.innerWidth - CARD_W - 8);
-    const y = Math.min(e.clientY + 28, window.innerHeight - CARD_H - 8);
+    const x = Math.max(8, Math.min(e.clientX + 28, window.innerWidth - CARD_W - 8));
+    // Flip card above cursor when there isn't enough room below
+    const spaceBelow = window.innerHeight - e.clientY - 28;
+    const y = spaceBelow >= CARD_H ? e.clientY + 28 : Math.max(8, e.clientY - CARD_H - 20);
     rawX.set(x);
     rawY.set(y);
   };

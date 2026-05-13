@@ -2,7 +2,7 @@
 
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF, Environment, useAnimations } from "@react-three/drei";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import type { Group, Mesh } from "three";
 
@@ -12,13 +12,21 @@ type BustSceneProps = {
   isDark?: boolean;
 };
 
-function DanceModel({ color, animate }: { color: string; animate: boolean }) {
+function DanceModel({
+  color,
+  animate,
+  onReady,
+}: {
+  color: string;
+  animate: boolean;
+  onReady: () => void;
+}) {
   const group = useRef<Group>(null);
   const { scene, animations } = useGLTF("/models/Dance.glb");
   const { actions } = useAnimations(animations, group);
   const materialsRef = useRef<THREE.MeshStandardMaterial[]>([]);
 
-  // Apply wireframe materials once on mount
+  // Apply wireframe materials + signal ready so canvas fades in after first paint
   useEffect(() => {
     const mats: THREE.MeshStandardMaterial[] = [];
     scene.traverse((child) => {
@@ -37,6 +45,7 @@ function DanceModel({ color, animate }: { color: string; animate: boolean }) {
       }
     });
     materialsRef.current = mats;
+    onReady();
     return () => { mats.forEach((m) => m.dispose()); };
   }, [scene]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -75,7 +84,15 @@ function DanceModel({ color, animate }: { color: string; animate: boolean }) {
 useGLTF.preload("/models/Dance.glb");
 
 export default function BustScene({ animate, wireframeColor = "#3aa9ff" }: BustSceneProps) {
-  const canvasStyle = { width: "100%", height: "100%", opacity: animate ? 1 : 0, transition: "opacity 0.8s ease-out" };
+  // Gate visibility on model ready to prevent white-material flash on first paint
+  const [modelReady, setModelReady] = useState(false);
+  const visible = animate && modelReady;
+  const canvasStyle = {
+    width: "100%",
+    height: "100%",
+    opacity: visible ? 1 : 0,
+    transition: "opacity 0.8s ease-out",
+  };
 
   return (
     <Canvas
@@ -86,7 +103,11 @@ export default function BustScene({ animate, wireframeColor = "#3aa9ff" }: BustS
     >
       <ambientLight intensity={0.4} />
       <Environment preset="studio" environmentIntensity={0.3} />
-      <DanceModel color={wireframeColor} animate={animate} />
+      <DanceModel
+        color={wireframeColor}
+        animate={animate}
+        onReady={() => setModelReady(true)}
+      />
     </Canvas>
   );
 }

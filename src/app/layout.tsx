@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { cabinet, neima } from "@/lib/fonts";
 import { ThemeProvider } from "@/lib/theme";
 import CustomCursor from "@/components/layout/CustomCursor";
+import SuppressR3FWarnings from "@/components/layout/SuppressR3FWarnings";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -35,6 +36,7 @@ export default function RootLayout({
         className={`${cabinet.variable} ${neima.variable} font-cabinet antialiased`}
       >
         <ThemeProvider>
+          <SuppressR3FWarnings />
           <CustomCursor />
           {children}
         </ThemeProvider>

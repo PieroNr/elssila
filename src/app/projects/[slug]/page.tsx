@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import { PageFooter } from "@/components/home/HomeFooter";
 import ProjectHero from "@/components/projects/ProjectHero";
 import ProjectMetaStrip from "@/components/projects/ProjectMetaStrip";
 import ProjectBrief from "@/components/projects/ProjectBrief";
@@ -69,7 +69,7 @@ export default async function ProjectPage({
         <ProjectCredits project={project} nextProject={neighbors.next} />
       )}
 
-      <Footer />
+      <PageFooter />
     </main>
   );
 }

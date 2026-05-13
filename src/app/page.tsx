@@ -41,7 +41,7 @@ export default function Home() {
           </div>
           <h1 className={`${neima.className} text-center text-4xl tracking-tight leading-tight md:text-5xl md:leading-[1.2]`}>
             CREATIVE
-            <br className="hidden sm:block" />
+            <br />
             PRODUCTION
           </h1>
           <p className={`${cabinet.className} mt-3 text-[0.65rem] tracking-[0.35em] uppercase text-accent`}>
