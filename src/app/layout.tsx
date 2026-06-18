@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { cabinet, neima } from "@/lib/fonts";
 import { ThemeProvider } from "@/lib/theme";
 import CustomCursor from "@/components/layout/CustomCursor";
@@ -40,6 +41,7 @@ export default function RootLayout({
           <CustomCursor />
           {children}
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
