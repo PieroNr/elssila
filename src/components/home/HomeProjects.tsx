@@ -5,7 +5,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { featuredProjects } from "@/data/projects";
+import { featuredProjects as staticFeatured, type Project } from "@/data/projects";
 import { useTheme } from "@/lib/theme";
 import { useLiteMode } from "@/lib/lite-mode";
 import { Reveal } from "@/components/ui/Reveal";
@@ -26,6 +26,7 @@ export default function HomeProjects() {
   const [hoverSlug, setHoverSlug] = useState<string | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const [knotVisible, setKnotVisible] = useState(false);
+  const [featuredProjects, setFeaturedProjects] = useState<Project[]>(staticFeatured);
 
   useEffect(() => {
     const el = sectionRef.current;
@@ -33,6 +34,13 @@ export default function HomeProjects() {
     const io = new IntersectionObserver(([entry]) => setKnotVisible(entry.isIntersecting), { rootMargin: "200px" });
     io.observe(el);
     return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/projects/featured")
+      .then((r) => r.json())
+      .then((data: Project[]) => { if (data.length > 0) setFeaturedProjects(data); })
+      .catch(() => {});
   }, []);
 
   const wireframeColor = theme === "dark" ? "#2391ff" : "#ff6a00";

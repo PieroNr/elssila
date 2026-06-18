@@ -7,31 +7,42 @@
 // Sanity…) later, only this module changes.
 
 export type ProjectImage = {
+  type?: "image";
   src: string;
   alt: string;
   w: number;
   h: number;
-  /** Used by the gallery to alternate between full-bleed and 2-up rows. */
   aspect?: "wide" | "tall" | "square";
 };
 
+export type ProjectVideo = {
+  type: "video";
+  src: string;
+  alt: string;
+};
+
+export type ProjectMedia = ProjectImage | ProjectVideo;
+
 export type ProjectCredit = { role: string; name: string };
+
+// TipTap JSON document node
+export type RichTextDoc = { type: "doc"; content: unknown[] } | Record<string, unknown>;
 
 export type Project = {
   slug: string;
-  ref: string;             // Editorial identifier shown in badges (e.g. "024")
+  ref: string;
   title: string;
   category: string;
   year: string;
   client?: string;
   role: string[];
-  brief: string;
-  intent?: string;         // Display-font "Note d'intention"
-  body?: string;           // Sans-serif long form
-  format?: string;         // Print only — "260 × 340 mm"
-  run?: string;            // Print only — "1 200 ex."
+  brief: string | RichTextDoc;  // string in static data, RichTextDoc from Supabase
+  intent?: string;
+  body?: string;
+  format?: string;
+  run?: string;
   hero: ProjectImage;
-  spread?: ProjectImage;   // Optional secondary image for the brief layout
+  spread?: ProjectMedia;
   gallery: ProjectImage[];
   tags: string[];
   credits?: ProjectCredit[];

@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
-import { projects, PROJECT_CATEGORIES, type Project } from "@/data/projects";
+import { PROJECT_CATEGORIES, type Project } from "@/data/projects";
 
 type SortKey = "year" | "title";
 
@@ -14,7 +14,7 @@ const CARD_H = 430;
 // Tabular registry view of every project. Filter by category, sort by year/title,
 // hover a row to surface a cursor-following preview card (desktop only).
 
-export default function ArchiveTable() {
+export default function ArchiveTable({ projects }: { projects: Project[] }) {
   const [filter, setFilter] = useState<string>("All");
   const [sort, setSort] = useState<SortKey>("year");
   const [hoverSlug, setHoverSlug] = useState<string | null>(null);
@@ -34,8 +34,7 @@ export default function ArchiveTable() {
   };
 
   const list = useMemo<Project[]>(() => {
-    let l =
-      filter === "All" ? projects : projects.filter((p) => p.category === filter);
+    let l = filter === "All" ? projects : projects.filter((p) => p.category === filter);
     if (sort === "year") {
       l = [...l].sort((a, b) => Number(b.year) - Number(a.year));
     } else {

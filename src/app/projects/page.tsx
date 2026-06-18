@@ -1,7 +1,9 @@
 import Header from "@/components/layout/Header";
 import { PageFooter } from "@/components/home/HomeFooter";
 import ArchiveTable from "@/components/projects/ArchiveTable";
-import { projects } from "@/data/projects";
+import { getAllProjects } from "@/lib/db/projects";
+import { projects as staticProjects } from "@/data/projects";
+import type { Project } from "@/data/projects";
 
 export const metadata = {
   title: "Index — Elssila Studio",
@@ -9,7 +11,17 @@ export const metadata = {
     "Tous les travaux du studio depuis sa fondation. Filtrer, trier, ouvrir — comme on feuillette un registre.",
 };
 
-export default function ProjectsPage() {
+export const dynamic = "force-dynamic";
+
+export default async function ProjectsPage() {
+  let allProjects: Project[] = [];
+  try {
+    const rows = await getAllProjects();
+    allProjects = rows.length > 0 ? (rows as unknown as Project[]) : staticProjects;
+  } catch {
+    allProjects = staticProjects;
+  }
+
   return (
     <main className="relative min-h-screen overflow-hidden bg-page text-fg">
       <div className="pointer-events-none fixed inset-0 z-5 opacity-20 noise-overlay" />
@@ -21,7 +33,7 @@ export default function ProjectsPage() {
           <div className="flex items-baseline justify-between">
             <div className="micro text-fg-3">⌗ Archive · 2019 → 2025</div>
             <div className="micro font-mono-ui text-fg-3">
-              {projects.length} ENTRIES · INDEX_24
+              {allProjects.length} ENTRIES · INDEX_24
             </div>
           </div>
           <div className="hairline mt-3" />
@@ -35,7 +47,7 @@ export default function ProjectsPage() {
             comme on feuillette un registre.
           </p>
 
-          <ArchiveTable />
+          <ArchiveTable projects={allProjects} />
 
           <div className="mt-12 flex flex-wrap items-center justify-between gap-6">
             <div className="micro text-fg-3">End of index · Pre-2019 sur demande</div>
