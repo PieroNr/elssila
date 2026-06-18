@@ -234,7 +234,7 @@ export default function ProjectForm({ project, action, mode }: Props) {
           </div>
           <div>
             <label className={lbl} htmlFor="year">Année *</label>
-            <input id="year" name="year" required defaultValue={project?.year ?? new Date().getFullYear().toString()} className={inp} />
+            <input id="year" name="year" required defaultValue={project?.year ?? ""} placeholder="2025" className={inp} />
           </div>
           <div>
             <label className={lbl} htmlFor="client">Client</label>

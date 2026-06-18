@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import ProjectForm from "@/components/admin/ProjectForm";
-import { getAllProjects } from "@/lib/db/projects";
+import { getAllProjectsAdmin } from "@/lib/db/projects";
 import { updateProject } from "../../actions";
 
 type Props = { params: Promise<{ id: string }> };
 
 export default async function EditProjectPage({ params }: Props) {
   const { id } = await params;
-  const projects = await getAllProjects();
+  const projects = await getAllProjectsAdmin();
   const project = projects.find((p) => p.id === id);
 
   if (!project) notFound();

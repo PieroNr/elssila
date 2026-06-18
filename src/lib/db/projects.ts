@@ -1,3 +1,4 @@
+import { createPublicClient } from "@/lib/supabase/public";
 import { createClient } from "@/lib/supabase/server";
 import type { Project } from "@/data/projects";
 
@@ -8,14 +9,16 @@ export type ProjectRow = Project & {
   updated_at: string;
 };
 
-function toProject(row: ProjectRow): Project {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { id, display_order, created_at, updated_at, ...project } = row;
-  return project as Project;
-}
+export const CACHE_TAG = "projects";
+
+// ── Public queries (portfolio pages) ──────────────────────────────────────
+// These functions are called inside server-rendered pages.
+// Next.js automatically caches the Full Route Cache for those pages.
+// revalidatePath() in admin actions busts that cache on every save.
+// revalidate = 3600 on each page sets a 1-hour TTL as a safety fallback.
 
 export async function getAllProjects(): Promise<ProjectRow[]> {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   const { data, error } = await supabase
     .from("projects")
     .select("*")
@@ -27,7 +30,7 @@ export async function getAllProjects(): Promise<ProjectRow[]> {
 }
 
 export async function getFeaturedProjects(): Promise<Project[]> {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   const { data, error } = await supabase
     .from("projects")
     .select("*")
@@ -35,11 +38,11 @@ export async function getFeaturedProjects(): Promise<Project[]> {
     .order("display_order", { ascending: true });
 
   if (error || !data) return [];
-  return (data as ProjectRow[]).map(toProject);
+  return data as unknown as Project[];
 }
 
 export async function getProjectBySlug(slug: string): Promise<ProjectRow | null> {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   const { data, error } = await supabase
     .from("projects")
     .select("*")
@@ -51,7 +54,21 @@ export async function getProjectBySlug(slug: string): Promise<ProjectRow | null>
 }
 
 export async function getAllSlugs(): Promise<string[]> {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   const { data } = await supabase.from("projects").select("slug");
   return data?.map((r) => r.slug) ?? [];
+}
+
+// ── Admin query (always fresh, uses auth session) ─────────────────────────
+
+export async function getAllProjectsAdmin(): Promise<ProjectRow[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("projects")
+    .select("*")
+    .order("display_order", { ascending: true })
+    .order("ref", { ascending: false });
+
+  if (error || !data) return [];
+  return data as ProjectRow[];
 }

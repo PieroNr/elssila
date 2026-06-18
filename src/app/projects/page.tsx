@@ -11,7 +11,9 @@ export const metadata = {
     "Tous les travaux du studio depuis sa fondation. Filtrer, trier, ouvrir — comme on feuillette un registre.",
 };
 
-export const dynamic = "force-dynamic";
+// Revalidate every hour as a safety fallback.
+// Admin saves call revalidatePath("/projects") for immediate cache bust.
+export const revalidate = 3600;
 
 export default async function ProjectsPage() {
   let allProjects: Project[] = [];

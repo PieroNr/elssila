@@ -65,7 +65,7 @@ export async function createProject(formData: FormData) {
   if (error) throw new Error(error.message);
 
   revalidatePath("/");
-  revalidatePath("/projects");
+  revalidatePath("/projects", "layout"); // busts /projects and all /projects/[slug]
   revalidatePath("/admin/projects");
   redirect("/admin/projects");
 }
@@ -91,7 +91,7 @@ export async function deleteProject(id: string) {
   if (error) throw new Error(error.message);
 
   revalidatePath("/");
-  revalidatePath("/projects");
+  revalidatePath("/projects", "layout"); // busts /projects and all /projects/[slug]
   revalidatePath("/admin/projects");
   redirect("/admin/projects");
 }

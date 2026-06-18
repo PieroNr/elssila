@@ -2,6 +2,8 @@ import Link from "next/link";
 import ProjectForm from "@/components/admin/ProjectForm";
 import { createProject } from "../actions";
 
+export const dynamic = "force-dynamic";
+
 export default function NewProjectPage() {
   return (
     <div className="min-h-screen bg-gray-50">

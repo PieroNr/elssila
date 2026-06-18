@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { getAllProjects } from "@/lib/db/projects";
+import { getAllProjectsAdmin } from "@/lib/db/projects";
 import { deleteProject, logout } from "./actions";
 import DeleteButton from "@/components/admin/DeleteButton";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminProjectsPage() {
-  const projects = await getAllProjects();
+  const projects = await getAllProjectsAdmin();
 
   return (
     <div className="min-h-screen bg-gray-50">

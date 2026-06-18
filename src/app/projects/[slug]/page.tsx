@@ -7,7 +7,7 @@ import ProjectMetaStrip from "@/components/projects/ProjectMetaStrip";
 import ProjectBrief from "@/components/projects/ProjectBrief";
 import ProjectGalleryHorizontal from "@/components/projects/ProjectGalleryHorizontal";
 import ProjectCredits from "@/components/projects/ProjectCredits";
-import { getAllProjects, getProjectBySlug } from "@/lib/db/projects";
+import { getAllProjects, getProjectBySlug, getAllSlugs } from "@/lib/db/projects";
 import {
   projects as staticProjects,
   getProjectBySlug as getStaticBySlug,
@@ -17,7 +17,15 @@ import {
 
 type Params = { slug: string };
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
+
+export async function generateStaticParams(): Promise<Params[]> {
+  try {
+    const slugs = await getAllSlugs();
+    if (slugs.length > 0) return slugs.map((slug) => ({ slug }));
+  } catch {}
+  return staticProjects.map((p) => ({ slug: p.slug }));
+}
 
 async function resolveProject(slug: string) {
   try {
