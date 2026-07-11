@@ -127,7 +127,7 @@ export default function ArchiveTable({ projects }: { projects: Project[] }) {
                 columnGap: "24px",
               }}
             >
-              <span className="micro-sm font-mono-ui text-fg-3">{p.ref}</span>
+              <span className="micro-sm font-mono-ui text-fg-3">{p.year}</span>
               <div className="font-display text-2xl tracking-tight transition-colors group-hover:text-accent">
                 {p.title}
               </div>
@@ -145,7 +145,7 @@ export default function ArchiveTable({ projects }: { projects: Project[] }) {
             {/* Mobile card */}
             <div className="flex items-baseline justify-between gap-4 py-5 md:hidden">
               <div className="flex-1">
-                <div className="micro-sm font-mono-ui mb-1 text-fg-3">{p.ref}</div>
+                <div className="micro-sm font-mono-ui mb-1 text-fg-3">{p.year}</div>
                 <div className="font-display text-2xl tracking-tight">{p.title}</div>
                 <div className="micro-sm mt-1 text-fg-3">
                   {p.category} · {p.year}
@@ -182,7 +182,7 @@ export default function ArchiveTable({ projects }: { projects: Project[] }) {
             </div>
             <div className="p-4">
               <div className="font-mono-ui text-[9px] tracking-[0.2em] opacity-60">
-                ▌ FILE_{hovered.ref} · {hovered.year}
+                ▌ {hovered.year}
               </div>
               <div className="font-display mt-2 text-xl leading-tight tracking-tight">
                 {hovered.title}

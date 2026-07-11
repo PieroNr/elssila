@@ -22,8 +22,7 @@ export async function getAllProjects(): Promise<ProjectRow[]> {
   const { data, error } = await supabase
     .from("projects")
     .select("*")
-    .order("display_order", { ascending: true })
-    .order("ref", { ascending: false });
+    .order("display_order", { ascending: true });
 
   if (error || !data) return [];
   return data as ProjectRow[];
@@ -66,8 +65,7 @@ export async function getAllProjectsAdmin(): Promise<ProjectRow[]> {
   const { data, error } = await supabase
     .from("projects")
     .select("*")
-    .order("display_order", { ascending: true })
-    .order("ref", { ascending: false });
+    .order("display_order", { ascending: true });
 
   if (error || !data) return [];
   return data as ProjectRow[];

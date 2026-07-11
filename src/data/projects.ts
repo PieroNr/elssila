@@ -32,7 +32,6 @@ export type ProjectVideoLink = { src: string; title?: string };
 
 export type Project = {
   slug: string;
-  ref?: string;
   videos?: ProjectVideoLink[];
   title: string;
   category: string;
@@ -42,7 +41,6 @@ export type Project = {
   brief: string | RichTextDoc;  // string in static data, RichTextDoc from Supabase
   intent?: string;
   body?: string;
-  format?: string;
   run?: string;
   hero: ProjectImage;
   spread?: ProjectMedia;

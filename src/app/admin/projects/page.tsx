@@ -91,7 +91,7 @@ export default async function AdminProjectsPage() {
               <tbody className="divide-y divide-gray-100">
                 {projects.map((project) => (
                   <tr key={project.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 font-mono text-xs text-gray-400">{project.ref}</td>
+                    <td className="px-4 py-3 font-mono text-xs text-gray-400">{project.slug}</td>
                     <td className="px-4 py-3 font-medium text-gray-900">
                       <div className="flex items-center gap-2">
                         {project.hero?.src && (
