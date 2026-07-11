@@ -120,11 +120,6 @@ export default function HomeProjects() {
                 <div className="pointer-events-none absolute inset-0 opacity-15 noise-overlay" />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
 
-                {p.ref && (
-                  <div className="micro-sm font-mono-ui pointer-events-none absolute top-3.5 right-4 text-white/70">
-                    №{p.ref}
-                  </div>
-                )}
 
                 <div className="pointer-events-none absolute right-4 bottom-4 left-4 text-white">
                   <div

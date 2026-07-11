@@ -11,7 +11,6 @@ export default function ProjectMetaStrip({ project }: Props) {
     { label: "Année", value: project.year },
     { label: "Discipline", value: project.category },
   ];
-  if (project.format) cells.push({ label: "Format", value: project.format });
   if (project.run) cells.push({ label: "Tirage", value: project.run });
 
   return (
