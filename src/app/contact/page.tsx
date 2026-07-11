@@ -6,7 +6,7 @@ import { PageFooter } from "@/components/home/HomeFooter";
 import Clock from "@/components/contact/Clock";
 import SeismographLive from "@/components/contact/SeismographLive";
 
-const STUDIO_EMAIL = "studio@elssila.com";
+const STUDIO_EMAIL = "elssila.pro@gmail.com";
 const STUDIO_PHONE = "+33 1 02 03 04 05";
 const PROJECT_TYPES = ["Brand", "Editorial", "Web / 3D", "Film", "Autre"] as const;
 

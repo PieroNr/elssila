@@ -28,9 +28,12 @@ export type ProjectCredit = { role: string; name: string };
 // TipTap JSON document node
 export type RichTextDoc = { type: "doc"; content: unknown[] } | Record<string, unknown>;
 
+export type ProjectVideoLink = { src: string; title?: string };
+
 export type Project = {
   slug: string;
-  ref: string;
+  ref?: string;
+  videos?: ProjectVideoLink[];
   title: string;
   category: string;
   year: string;
@@ -432,13 +435,12 @@ export function getProjectNeighbors(slug: string): { prev: Project; next: Projec
   return { prev, next };
 }
 
-/** Unique categories — used by the Archive filter chips. Order matches the mock. */
+/** Unique categories — used by the Archive filter chips. */
 export const PROJECT_CATEGORIES = [
   "All",
-  "Brand",
-  "Editorial",
-  "Digital",
-  "Film",
-  "Installation",
-  "Fashion",
+  "Court métrage",
+  "Clips musicaux",
+  "Publicité",
+  "Institutionnel",
+  "Shooting",
 ] as const;

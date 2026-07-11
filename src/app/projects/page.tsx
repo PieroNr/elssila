@@ -6,9 +6,9 @@ import { projects as staticProjects } from "@/data/projects";
 import type { Project } from "@/data/projects";
 
 export const metadata = {
-  title: "Index — Elssila Studio",
+  title: "Projets — Elssila Studio",
   description:
-    "Tous les travaux du studio depuis sa fondation. Filtrer, trier, ouvrir — comme on feuillette un registre.",
+    "Les projets vidéos et photos réalisés durant ces deux dernières années.",
 };
 
 // Revalidate every hour as a safety fallback.
@@ -33,10 +33,7 @@ export default async function ProjectsPage() {
 
         <section className="pt-12 pb-32">
           <div className="flex items-baseline justify-between">
-            <div className="micro text-fg-3">⌗ Archive · 2019 → 2025</div>
-            <div className="micro font-mono-ui text-fg-3">
-              {allProjects.length} ENTRIES · INDEX_24
-            </div>
+            <div className="micro text-fg-3">⌗ Projets · 2025 → 2026</div>
           </div>
           <div className="hairline mt-3" />
 
@@ -45,22 +42,11 @@ export default async function ProjectsPage() {
             <span className="text-accent">.</span>
           </h1>
           <p className="font-display mt-6 max-w-xl text-lg leading-snug text-fg-2 md:text-xl">
-            Tous les travaux du studio depuis sa fondation. Filtrer, trier, ouvrir —
-            comme on feuillette un registre.
+            Les projets vidéos et photos réalisés durant ces deux dernières années.
           </p>
 
           <ArchiveTable projects={allProjects} />
 
-          <div className="mt-12 flex flex-wrap items-center justify-between gap-6">
-            <div className="micro text-fg-3">End of index · Pre-2019 sur demande</div>
-            <button
-              type="button"
-              className="micro border px-6 py-3 text-fg transition-colors hover:border-fg hover:bg-fg hover:text-page"
-              style={{ borderColor: "var(--color-separator)" }}
-            >
-              Télécharger le registre PDF ↓
-            </button>
-          </div>
         </section>
       </div>
 

@@ -3,6 +3,7 @@ import { generateHTML } from "@tiptap/html";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import type { Project, RichTextDoc, ProjectMedia } from "@/data/projects";
+import SpreadVideoPlayer from "./SpreadVideoPlayer";
 
 type Props = { project: Project };
 
@@ -18,52 +19,6 @@ function renderBrief(brief: string | RichTextDoc): string {
 
 function isVideo(media: ProjectMedia): media is { type: "video"; src: string; alt: string } {
   return media.type === "video";
-}
-
-// Converts watch/share URLs to embeddable iframes.
-// Returns null for direct video files (mp4, webm…) — use <video> instead.
-function getEmbedUrl(src: string): string | null {
-  // YouTube: watch?v=ID, youtu.be/ID, /embed/ID
-  const yt = src.match(
-    /(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
-  );
-  if (yt) return `https://www.youtube.com/embed/${yt[1]}?autoplay=0&rel=0`;
-
-  // Vimeo
-  const vimeo = src.match(/vimeo\.com\/(\d+)/);
-  if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}`;
-
-  return null;
-}
-
-function SpreadVideo({ src, alt, ref_ }: { src: string; alt: string; ref_: string }) {
-  const embedUrl = getEmbedUrl(src);
-  return (
-    <div className="relative aspect-video w-full overflow-hidden bg-black">
-      {embedUrl ? (
-        <iframe
-          src={embedUrl}
-          title={alt}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className="absolute inset-0 h-full w-full border-0"
-        />
-      ) : (
-        <video
-          src={src}
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="h-full w-full object-cover"
-          title={alt}
-        />
-      )}
-      <figcaption className="font-mono-ui pointer-events-none absolute right-3 top-3 bg-page/70 px-2 py-1 text-[9px] uppercase tracking-[0.2em] text-fg-3">
-        SPREAD/{ref_}
-      </figcaption>
-    </div>
-  );
 }
 
 export default function ProjectBrief({ project }: Props) {
@@ -108,7 +63,7 @@ export default function ProjectBrief({ project }: Props) {
         {project.spread && (
           <figure className="relative w-full md:col-span-7">
             {isVideo(project.spread) ? (
-              <SpreadVideo src={project.spread.src} alt={project.spread.alt} ref_={project.ref} />
+              <SpreadVideoPlayer src={project.spread.src} alt={project.spread.alt} />
             ) : (
               <div className="relative aspect-[4/3] w-full overflow-hidden">
                 <Image
@@ -119,9 +74,6 @@ export default function ProjectBrief({ project }: Props) {
                   className="object-cover"
                 />
                 <div className="pointer-events-none absolute inset-0 opacity-15 noise-overlay" />
-                <figcaption className="font-mono-ui pointer-events-none absolute right-3 top-3 bg-page/70 px-2 py-1 text-[9px] uppercase tracking-[0.2em] text-fg-3">
-                  SPREAD/{project.ref}
-                </figcaption>
               </div>
             )}
           </figure>

@@ -69,8 +69,7 @@ export default function HomeProjects() {
       <div className="relative z-[1] mx-auto max-w-6xl">
         <Reveal>
           <div className="flex items-baseline justify-between">
-            <span className="micro text-fg-3">⌗ Selected Work</span>
-            <span className="micro text-fg-3">04 / 24 · Index</span>
+            <span className="micro text-fg-3">⌗ Travaux sélectionnés</span>
           </div>
           <div className="hairline mt-3" />
         </Reveal>
@@ -80,10 +79,10 @@ export default function HomeProjects() {
             className="font-display"
             style={{ fontSize: "clamp(64px, 9vw, 128px)", lineHeight: 0.92, letterSpacing: "-0.02em", margin: 0 }}
           >
-            Projects<span className="text-accent">.</span>
+            Projets<span className="text-accent">.</span>
           </h2>
           <Link href="/projects" className="micro pb-3 text-fg-2 transition-colors hover:text-accent">
-            All projects →
+            Tous les projets →
           </Link>
         </Reveal>
 
@@ -121,9 +120,11 @@ export default function HomeProjects() {
                 <div className="pointer-events-none absolute inset-0 opacity-15 noise-overlay" />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
 
-                <div className="micro-sm font-mono-ui pointer-events-none absolute top-3.5 right-4 text-white/70">
-                  №{p.ref}
-                </div>
+                {p.ref && (
+                  <div className="micro-sm font-mono-ui pointer-events-none absolute top-3.5 right-4 text-white/70">
+                    №{p.ref}
+                  </div>
+                )}
 
                 <div className="pointer-events-none absolute right-4 bottom-4 left-4 text-white">
                   <div

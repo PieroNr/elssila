@@ -29,7 +29,6 @@ function buildProjectPayload(formData: FormData) {
 
   return {
     slug: (formData.get("slug") as string).trim().toLowerCase().replace(/\s+/g, "-"),
-    ref: (formData.get("ref") as string).trim(),
     title: (formData.get("title") as string).trim(),
     category: (formData.get("category") as string).trim(),
     year: (formData.get("year") as string).trim(),
@@ -38,8 +37,6 @@ function buildProjectPayload(formData: FormData) {
     brief: parseJsonField(formData.get("brief") as string) ?? {},
     intent: ((formData.get("intent") as string) || "").trim() || null,
     body: ((formData.get("body") as string) || "").trim() || null,
-    format: ((formData.get("format") as string) || "").trim() || null,
-    run: ((formData.get("run") as string) || "").trim() || null,
     hero: parseImageField(formData.get("hero") as string) ?? {
       src: "",
       alt: "",
@@ -48,6 +45,7 @@ function buildProjectPayload(formData: FormData) {
       aspect: "wide",
     },
     spread: parseJsonField<ProjectMedia>(formData.get("spread") as string),
+    videos: parseJsonField<{ src: string; title?: string }[]>(formData.get("videos") as string) ?? [],
     gallery: parseJsonField<ProjectImage[]>(formData.get("gallery") as string) ?? [],
     tags: tags ? tags.split(",").map((s) => s.trim()).filter(Boolean) : [],
     credits: parseJsonField<ProjectCredit[]>(formData.get("credits") as string) ?? [],

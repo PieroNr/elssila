@@ -6,6 +6,7 @@ import ProjectHero from "@/components/projects/ProjectHero";
 import ProjectMetaStrip from "@/components/projects/ProjectMetaStrip";
 import ProjectBrief from "@/components/projects/ProjectBrief";
 import ProjectGalleryHorizontal from "@/components/projects/ProjectGalleryHorizontal";
+import ProjectVideos from "@/components/projects/ProjectVideos";
 import ProjectCredits from "@/components/projects/ProjectCredits";
 import { getAllProjects, getProjectBySlug, getAllSlugs } from "@/lib/db/projects";
 import {
@@ -109,7 +110,10 @@ export default async function ProjectPage({ params }: { params: Promise<Params> 
       <ProjectHero project={project} index={index} total={total} />
       <ProjectMetaStrip project={project} />
       <ProjectBrief project={project} />
-      <ProjectGalleryHorizontal images={project.gallery} />
+      <ProjectVideos videos={(project as { videos?: { src: string; title?: string }[] }).videos ?? []} />
+      {project.gallery && project.gallery.length > 0 && (
+        <ProjectGalleryHorizontal images={project.gallery} />
+      )}
       {neighbors && (
         <ProjectCredits project={project} nextProject={neighbors.next} />
       )}

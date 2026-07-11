@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/lib/theme";
 import CustomCursor from "@/components/layout/CustomCursor";
 import SuppressR3FWarnings from "@/components/layout/SuppressR3FWarnings";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   title: "Elssila Studio",
@@ -41,6 +42,7 @@ export default function RootLayout({
           {children}
         </ThemeProvider>
       </body>
+      <Analytics />
     </html>
   );
 }

@@ -2,12 +2,107 @@
 
 import { useState, useRef, useTransition } from "react";
 import { createClient } from "@/lib/supabase/client";
-import type { ProjectImage, ProjectVideo, ProjectMedia, ProjectCredit, RichTextDoc } from "@/data/projects";
+import type { ProjectImage, ProjectVideo, ProjectMedia, ProjectCredit, RichTextDoc, ProjectVideoLink } from "@/data/projects";
 import type { ProjectRow } from "@/lib/db/projects";
 import RichTextEditor from "./RichTextEditor";
 
-const CATEGORIES = ["Brand", "Editorial", "Digital", "Film", "Installation", "Fashion"];
+const CATEGORIES = ["Court métrage", "Clips musicaux", "Publicité", "Institutionnel", "Shooting"];
 const ASPECTS = ["wide", "tall", "square"] as const;
+
+// ── Video field ────────────────────────────────────────────────────────────
+
+function VideoField({
+  index,
+  value,
+  onChange,
+  onRemove,
+}: {
+  index: number;
+  value: ProjectVideoLink;
+  onChange: (v: ProjectVideoLink) => void;
+  onRemove: () => void;
+}) {
+  const inp2 = "w-full rounded border border-gray-200 bg-white px-2 py-1.5 text-sm outline-none focus:border-gray-900";
+  return (
+    <div className="relative space-y-2 rounded-lg border border-gray-200 bg-gray-50 p-4">
+      <p className="text-xs font-semibold uppercase tracking-widest text-gray-500">Vidéo {index + 1}</p>
+      <input
+        type="url"
+        placeholder="URL YouTube ou Vimeo (ex: https://youtu.be/…)"
+        value={value.src}
+        onChange={(e) => onChange({ ...value, src: e.target.value })}
+        className={inp2}
+      />
+      <input
+        type="text"
+        placeholder="Titre / description (optionnel)"
+        value={value.title ?? ""}
+        onChange={(e) => onChange({ ...value, title: e.target.value })}
+        className={inp2}
+      />
+      {value.src && (
+        <p className="text-xs text-gray-400">Aperçu disponible sur la page projet.</p>
+      )}
+      <button
+        type="button"
+        onClick={onRemove}
+        className="absolute right-3 top-3 text-xs text-red-400 hover:text-red-600"
+      >
+        ✕
+      </button>
+    </div>
+  );
+}
+
+// ── Image optimisation (client-side, canvas → WebP) ───────────────────────
+
+async function optimizeImage(
+  file: File,
+  maxWidth = 2000,
+  quality = 0.85,
+): Promise<{ file: File; width: number; height: number }> {
+  // SVG and GIF: skip conversion, just read dimensions
+  if (file.type === "image/svg+xml" || file.type === "image/gif") {
+    const bmp = await createImageBitmap(file);
+    return { file, width: bmp.width, height: bmp.height };
+  }
+
+  return new Promise((resolve, reject) => {
+    const img = new window.Image();
+    const objectUrl = URL.createObjectURL(file);
+
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      let w = img.naturalWidth;
+      let h = img.naturalHeight;
+      if (w > maxWidth) {
+        h = Math.round((h * maxWidth) / w);
+        w = maxWidth;
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return reject(new Error("Canvas non disponible"));
+      ctx.drawImage(img, 0, 0, w, h);
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) return reject(new Error("Conversion échouée"));
+          const optimized = new File(
+            [blob],
+            file.name.replace(/\.[^.]+$/, ".webp"),
+            { type: "image/webp" },
+          );
+          resolve({ file: optimized, width: w, height: h });
+        },
+        "image/webp",
+        quality,
+      );
+    };
+    img.onerror = () => { URL.revokeObjectURL(objectUrl); reject(new Error("Chargement image échoué")); };
+    img.src = objectUrl;
+  });
+}
 
 // ── Image field ────────────────────────────────────────────────────────────
 
@@ -31,13 +126,17 @@ function ImageField({
     const file = e.target.files?.[0];
     if (!file) return;
     setUploading(true);
-    const ext = file.name.split(".").pop();
-    const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-    const { data, error } = await supabase.storage.from("project-images").upload(path, file, { upsert: false });
-    if (error) { alert(`Upload échoué : ${error.message}`); setUploading(false); return; }
-    const { data: { publicUrl } } = supabase.storage.from("project-images").getPublicUrl(data.path);
-    const bitmap = await createImageBitmap(file);
-    onChange({ ...img, src: publicUrl, w: bitmap.width, h: bitmap.height });
+    try {
+      const { file: optimized, width, height } = await optimizeImage(file);
+      const ext = optimized.name.split(".").pop();
+      const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { data, error } = await supabase.storage.from("project-images").upload(path, optimized, { upsert: false });
+      if (error) { alert(`Upload échoué : ${error.message}`); setUploading(false); return; }
+      const { data: { publicUrl } } = supabase.storage.from("project-images").getPublicUrl(data.path);
+      onChange({ ...img, src: publicUrl, w: width, h: height });
+    } catch (err) {
+      alert(`Erreur : ${err instanceof Error ? err.message : "inconnue"}`);
+    }
     setUploading(false);
   }
 
@@ -163,10 +262,12 @@ export default function ProjectForm({ project, action, mode }: Props) {
   const [hero, setHero] = useState<ProjectImage>(
     project?.hero ?? { src: "", alt: "", w: 1600, h: 1067, aspect: "wide" },
   );
+  const [category, setCategory] = useState(project?.category ?? "");
   const [spread, setSpread] = useState<ProjectMedia | null>(project?.spread ?? null);
   const [gallery, setGallery] = useState<ProjectImage[]>(project?.gallery ?? []);
   const [credits, setCredits] = useState<ProjectCredit[]>(project?.credits ?? []);
   const [brief, setBrief] = useState<RichTextDoc | null>(getInitialBrief(project));
+  const [videos, setVideos] = useState<ProjectVideoLink[]>((project as { videos?: ProjectVideoLink[] })?.videos ?? []);
   const [error, setError] = useState<string | null>(null);
 
   function addGalleryImage() {
@@ -192,6 +293,7 @@ export default function ProjectForm({ project, action, mode }: Props) {
     fd.set("gallery", JSON.stringify(gallery));
     fd.set("credits", JSON.stringify(credits));
     fd.set("brief", brief ? JSON.stringify(brief) : "{}");
+    fd.set("videos", JSON.stringify(videos));
 
     startTransition(async () => {
       try {
@@ -222,12 +324,15 @@ export default function ProjectForm({ project, action, mode }: Props) {
             <input id="slug" name="slug" required defaultValue={project?.slug} className={inp} />
           </div>
           <div>
-            <label className={lbl} htmlFor="ref">Référence * <span className="font-normal text-gray-400">(ex: 024)</span></label>
-            <input id="ref" name="ref" required defaultValue={project?.ref} className={inp} />
-          </div>
-          <div>
             <label className={lbl} htmlFor="category">Catégorie *</label>
-            <select id="category" name="category" required defaultValue={project?.category ?? ""} className={inp}>
+            <select
+              id="category"
+              name="category"
+              required
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className={inp}
+            >
               <option value="">Sélectionner…</option>
               {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
@@ -282,16 +387,6 @@ export default function ProjectForm({ project, action, mode }: Props) {
           <label className={lbl} htmlFor="body">Corps du texte long <span className="font-normal text-gray-400">(optionnel)</span></label>
           <textarea id="body" name="body" rows={4} defaultValue={project?.body ?? ""} className={inp} />
         </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className={lbl} htmlFor="format">Format <span className="font-normal text-gray-400">(print)</span></label>
-            <input id="format" name="format" defaultValue={project?.format ?? ""} placeholder="260 × 340 mm" className={inp} />
-          </div>
-          <div>
-            <label className={lbl} htmlFor="run">Tirage <span className="font-normal text-gray-400">(print)</span></label>
-            <input id="run" name="run" defaultValue={project?.run ?? ""} placeholder="1 200 ex." className={inp} />
-          </div>
-        </div>
       </div>
 
       {/* ── Images ── */}
@@ -315,6 +410,37 @@ export default function ProjectForm({ project, action, mode }: Props) {
             )}
           </div>
           {spread && <SpreadMediaField value={spread} onChange={setSpread} />}
+        </div>
+
+        <div>
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-widest text-gray-500">
+              Vidéos supplémentaires ({videos.length})
+            </span>
+            <button
+              type="button"
+              onClick={() => setVideos([...videos, { src: "" }])}
+              className="text-xs text-gray-900 underline"
+            >
+              + Ajouter une vidéo
+            </button>
+          </div>
+          <div className="space-y-3">
+            {videos.map((v, i) => (
+              <VideoField
+                key={i}
+                index={i}
+                value={v}
+                onChange={(updated) => setVideos(videos.map((x, idx) => idx === i ? updated : x))}
+                onRemove={() => setVideos(videos.filter((_, idx) => idx !== i))}
+              />
+            ))}
+            {videos.length === 0 && (
+              <p className="text-xs text-gray-400">
+                Ces vidéos s&apos;affichent sous le spread principal sur la page projet.
+              </p>
+            )}
+          </div>
         </div>
 
         <div>

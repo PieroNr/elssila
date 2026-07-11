@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { cabinet, neima } from "@/lib/fonts";
 
-const STUDIO_EMAIL = "studio@elssila.com";
+const STUDIO_EMAIL = "elssila.pro@gmail.com";
 
 export default function Footer() {
   const year = new Date().getFullYear();

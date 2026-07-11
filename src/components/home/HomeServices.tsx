@@ -60,8 +60,7 @@ export default function HomeServices() {
       <div className="relative z-[1] mx-auto max-w-6xl">
         <Reveal>
           <div className="flex items-baseline justify-between">
-            <span className="micro text-fg-3">⌗ Capabilities</span>
-            <span className="micro text-fg-3">04 disciplines</span>
+            <span className="micro text-fg-3">⌗ Services</span>
           </div>
           <div className="hairline mt-3" />
         </Reveal>
@@ -75,7 +74,7 @@ export default function HomeServices() {
             <span className="text-accent">.</span>
           </h2>
           <Link href="/services" className="micro pb-3 text-fg-2 transition-colors hover:text-accent">
-            All services →
+            Tous les services →
           </Link>
         </Reveal>
 

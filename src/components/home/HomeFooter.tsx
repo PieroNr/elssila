@@ -55,12 +55,12 @@ export default function HomeFooter({ showMarquee = true }: { showMarquee?: boole
           className="inline-block h-2 w-2 rounded-full"
           style={{ background: "var(--color-accent-vivid)", boxShadow: "0 0 12px var(--color-accent-vivid)" }}
         />
-        <span>ELS · MMXXV</span>
+        <span>ELSSILA · 2026</span>
       </div>
 
       <div className="relative mx-auto max-w-6xl px-6 md:px-16">
         <div className="micro" style={{ color: FG_50 }}>
-          ⌗ Get in touch
+          ⌗ Nous écrire
         </div>
         <div className="mt-3 h-[0.5px] w-full" style={{ background: FG_18 }} />
 
@@ -76,7 +76,7 @@ export default function HomeFooter({ showMarquee = true }: { showMarquee?: boole
         >
           Un projet,{" "}
           <span className="italic-display" style={{ color: "var(--color-accent-vivid)" }}>
-            une intuition
+            une idée
           </span>{" "}
           ?
         </h3>
@@ -89,17 +89,17 @@ export default function HomeFooter({ showMarquee = true }: { showMarquee?: boole
             Démarrer un projet
           </Link>
           <a
-            href="mailto:studio@elssila.com"
+            href="mailto:elssila.pro@gmail.com"
             className="px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors md:px-9 md:py-3.5"
             style={{ border: "1px solid rgba(255,255,255,0.4)", color: "#fff" }}
           >
-            studio@elssila.com
+            elssila.pro@gmail.com
           </a>
         </div>
 
         {/* Columns — on mobile: 2 cols (brand + nav), on desktop: 4 cols */}
         <div
-          className="mt-10 grid grid-cols-2 gap-8 pt-8 md:mt-24 md:grid-cols-[1.2fr_1fr_1fr_1fr] md:gap-12 md:pt-10"
+          className="mt-10 grid grid-cols-2 gap-8 pt-8 md:mt-24 md:grid-cols-[1.5fr_1fr] md:gap-12 md:pt-10"
           style={{ borderTop: `0.5px solid ${FG_18}` }}
         >
           {/* Brand col — full width on mobile */}
@@ -108,39 +108,18 @@ export default function HomeFooter({ showMarquee = true }: { showMarquee?: boole
               Elssila
             </div>
             <p className="mt-2 text-sm leading-relaxed md:mt-3 md:max-w-xs" style={{ color: FG_60 }}>
-              Studio de production créative indépendant.
-              Direction artistique, image, expériences.
+              Studio de production audiovisuelle.
+              Direction artistique, réalisation et photographie.
             </p>
-            <div className="micro-sm font-mono-ui mt-4 md:mt-6" style={{ color: FG_40 }}>
-              EST. 2019 · MMXXV · 48.8566° N
-            </div>
           </div>
 
-          {/* Navigation col — visible on mobile */}
-          <div className="md:hidden">
+          {/* Navigation col */}
+          <div>
             <div className="micro-sm mb-3" style={{ color: FG_40 }}>Navigation</div>
             {NAV_LINKS.map(([l, h]) => (
               <Link key={l} href={h} className="block py-1.5 text-sm transition-colors hover:text-white" style={{ color: "rgba(253,242,233,0.85)" }}>
                 {l}
               </Link>
-            ))}
-          </div>
-
-          {/* Desktop-only extra cols */}
-          <div className="hidden md:block">
-            <FooterColumn label="Studio" items={STUDIO_LINKS} />
-          </div>
-          <div className="hidden md:block">
-            <FooterColumn label="Navigation" items={NAV_LINKS} />
-          </div>
-
-          <div className="hidden md:block">
-            <div className="micro-sm mb-4" style={{ color: FG_40 }}>Suivre</div>
-            {SOCIAL.map(([k, v]) => (
-              <a key={k} href="#" className="flex items-center justify-between py-2 text-sm" style={{ color: FG, borderBottom: `0.5px solid ${FG_10}` }}>
-                <span>{k}</span>
-                <span style={{ color: FG_45 }}>{v} ↗</span>
-              </a>
             ))}
           </div>
         </div>
@@ -178,9 +157,6 @@ export default function HomeFooter({ showMarquee = true }: { showMarquee?: boole
           </span>
           <span className="micro-sm font-mono-ui hidden md:inline" style={{ color: FG_40 }}>
             VOL. 01 · ISO 400 · v1.0
-          </span>
-          <span className="micro-sm" style={{ color: FG_40 }}>
-            Mentions légales · Crédits
           </span>
         </div>
       </div>

@@ -18,7 +18,7 @@ export default function ServicesPage() {
 
         <section className="pt-12 pb-32">
           <div className="flex items-baseline justify-between">
-            <div className="micro text-fg-3">⌗ Capabilities · 04 disciplines</div>
+            <div className="micro text-fg-3">⌗ Services</div>
             <div className="micro font-mono-ui text-fg-3">
               MMXXV · Ce que nous faisons
             </div>

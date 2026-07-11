@@ -99,13 +99,13 @@ export default function HomeHero({ ready, onPastHeroChange }: HomeHeroProps) {
               className="font-display tracking-tight"
               style={{ fontSize: "clamp(48px, 9vw, 128px)", lineHeight: 1.05, letterSpacing: "-0.02em", margin: 0 }}
             >
-              CREATIVE
-              <br />
               PRODUCTION
+              <br />
+              VIDEO
             </motion.h1>
 
             <motion.p variants={heroItem} className="micro mt-4 text-accent">
-              Defining the visual edge of tomorrow
+              vidéaste photographe et directrice artistique audiovisuelle
             </motion.p>
 
             <motion.div variants={heroItem} className="mt-8 flex flex-wrap justify-center gap-3">
@@ -113,7 +113,7 @@ export default function HomeHero({ ready, onPastHeroChange }: HomeHeroProps) {
                 href="/projects"
                 className="bg-accent px-7 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-white transition-colors hover:bg-accent-hover md:px-9 md:py-3.5"
               >
-                Voir le travail
+                Voir les projets
               </Link>
               <Link
                 href="/contact"
@@ -123,18 +123,6 @@ export default function HomeHero({ ready, onPastHeroChange }: HomeHeroProps) {
               </Link>
             </motion.div>
           </motion.div>
-        </div>
-
-        {/* Corner stamps — hidden on small mobile, visible md+ */}
-        <div className="micro-sm font-mono-ui absolute top-8 left-8 z-[2] hidden text-fg-3 sm:block md:left-16">
-          ⌗ EST. 2019
-          <br />
-          PARIS · FR
-        </div>
-        <div className="micro-sm font-mono-ui absolute top-8 right-8 z-[2] hidden text-right text-fg-3 sm:block md:right-16">
-          VOL. 01 · MMXXV
-          <br />
-          ISO 400
         </div>
 
         <div ref={heroSentinelRef} className="absolute bottom-0 h-px w-px" />
@@ -147,59 +135,66 @@ export default function HomeHero({ ready, onPastHeroChange }: HomeHeroProps) {
 }
 
 function Showreel() {
-  const [playing, setPlaying] = useState(true);
+  const [loaded, setLoaded] = useState(false);
 
   return (
     <section className="relative">
       <Reveal className="mx-auto max-w-6xl px-6 pt-12 md:pt-24">
         <div className="flex items-baseline justify-between">
           <span className="micro text-fg-3">⌗ Showreel</span>
-          <span className="micro text-fg-3">2025 · 02:47</span>
         </div>
         <div className="hairline mt-3" />
       </Reveal>
 
-      {/* Video — taller on mobile for better impact */}
       <div className="relative mt-4 w-full overflow-hidden" style={{ aspectRatio: "16/9" }}>
-        <div
-          className="absolute inset-0 md:hidden"
-          style={{ aspectRatio: "9/16", width: "100%", height: "auto" }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "repeating-linear-gradient(135deg, rgba(183,211,213,0.06) 0px, rgba(183,211,213,0.06) 2px, transparent 2px, transparent 14px), linear-gradient(135deg, #0a1d2c, #051018)",
-          }}
-        />
-        <div className="micro-sm font-mono-ui absolute top-3 left-3 border border-white/10 bg-black/60 px-1.5 py-1 text-white/55">
-          REEL/MASTER · 2160p
-        </div>
-        <div className="pointer-events-none absolute inset-0 opacity-20 noise-overlay" />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+        {loaded ? (
+          <iframe
+            src="https://www.youtube.com/embed/oUt0rwGF37k?autoplay=1&rel=0&modestbranding=1"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="absolute inset-0 h-full w-full"
+            title="Showreel Elssila Studio"
+          />
+        ) : (
+          <>
+            {/* YouTube thumbnail */}
+            <img
+              src="https://img.youtube.com/vi/oUt0rwGF37k/maxresdefault.jpg"
+              alt="Showreel Elssila Studio"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-black/40" />
+            <div className="pointer-events-none absolute inset-0 opacity-15 noise-overlay" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
 
-        {/* Play button */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <button
-            type="button"
-            onClick={() => setPlaying((p) => !p)}
-            aria-label={playing ? "Pause showreel" : "Play showreel"}
-            className="flex h-16 w-16 items-center justify-center rounded-full border border-white/40 bg-white/15 text-base text-white backdrop-blur-md transition-transform hover:scale-110 md:h-24 md:w-24 md:text-xl"
-          >
-            {playing ? "▮▮" : "▶"}
-          </button>
-        </div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <button
+                type="button"
+                onClick={() => setLoaded(true)}
+                aria-label="Lancer le showreel"
+                className="flex h-16 w-16 items-center justify-center rounded-full border border-white/40 bg-white/15 text-base text-white backdrop-blur-md transition-transform hover:scale-110 md:h-24 md:w-24 md:text-xl"
+              >
+                ▶
+              </button>
+            </div>
 
-        {/* Bottom labels */}
-        <div className="absolute bottom-0 left-0 right-0 flex items-end justify-between px-4 py-4 md:px-8 md:py-5">
-          <span className="micro text-white/85">▌ Selected work · 2024 — 2025</span>
-          <span className="micro-sm font-mono-ui hidden text-white/55 sm:block">VOL. 01 / MUTED</span>
-        </div>
+            <div className="absolute bottom-0 left-0 right-0 flex items-end px-4 py-4 md:px-8 md:py-5">
+              <span className="micro text-white/85">▌ Travaux sélectionnés · 2025 — 2026</span>
+            </div>
+          </>
+        )}
       </div>
 
       <div className="mx-auto mt-4 flex max-w-6xl items-center justify-between px-6 pb-16 md:pb-24">
-        <span className="micro text-fg-3">Defining the visual edge of tomorrow</span>
-        <span className="micro text-accent">→ See full reel</span>
+        <span className="micro text-fg-3">vidéaste photographe et directrice artistique audiovisuelle</span>
+        <a
+          href="https://youtu.be/oUt0rwGF37k"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="micro text-accent"
+        >
+          → Voir le showreel
+        </a>
       </div>
     </section>
   );
