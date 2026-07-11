@@ -26,10 +26,10 @@ export default function ServicesPage() {
           <div className="hairline mt-3" />
 
           <h1 className="font-display mt-12 text-5xl leading-[0.92] tracking-tight md:text-9xl">
-            Services<span className="text-accent">,</span>
+            Pour vos projets<span className="text-accent">,</span>
             <br />
-            <span className="italic-display text-fg-2">quatre</span>
-            <span className="text-fg"> mouvements.</span>
+            <span className="italic-display text-accent">5</span>
+            <span className="text-fg"> services</span>
           </h1>
 
           <div className="mt-20 md:mt-24">

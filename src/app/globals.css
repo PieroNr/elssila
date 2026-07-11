@@ -239,15 +239,6 @@ body {
   opacity: 0;
 }
 
-@media (pointer: fine) {
-  html,
-  body,
-  body *,
-  body *::before,
-  body *::after {
-    cursor: none !important;
-  }
-}
 
 @media (pointer: coarse) {
   .app-cross-cursor {

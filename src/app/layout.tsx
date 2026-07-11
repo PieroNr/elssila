@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { cabinet, neima } from "@/lib/fonts";
 import { ThemeProvider } from "@/lib/theme";
-import CustomCursor from "@/components/layout/CustomCursor";
 import SuppressR3FWarnings from "@/components/layout/SuppressR3FWarnings";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next"
@@ -29,7 +28,7 @@ export default function RootLayout({
             to prevent any flash of the wrong theme on page load. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('elssila:theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}})();`,
+            __html: `(function(){try{var t=localStorage.getItem('elssila:theme');document.documentElement.setAttribute('data-theme',(t==='dark'||t==='light')?t:'dark')}catch(e){document.documentElement.setAttribute('data-theme','dark')}})();`,
           }}
         />
       </head>
@@ -38,7 +37,6 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <SuppressR3FWarnings />
-          <CustomCursor />
           {children}
         </ThemeProvider>
       </body>

@@ -4,8 +4,6 @@ import { PageFooter } from "@/components/home/HomeFooter";
 import Manifesto from "@/components/studio/Manifesto";
 import MarqueeBand from "@/components/studio/MarqueeBand";
 import Approach from "@/components/studio/Approach";
-import TeamGrid from "@/components/studio/TeamGrid";
-import Recognitions from "@/components/studio/Recognitions";
 
 export const metadata: Metadata = {
   title: "Studio — Elssila",
@@ -25,8 +23,6 @@ export default function StudioPage() {
       <Manifesto />
       <MarqueeBand />
       <Approach />
-      <TeamGrid />
-      <Recognitions />
 
       <PageFooter />
     </main>

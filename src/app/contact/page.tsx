@@ -7,8 +7,8 @@ import Clock from "@/components/contact/Clock";
 import SeismographLive from "@/components/contact/SeismographLive";
 
 const STUDIO_EMAIL = "elssila.pro@gmail.com";
-const STUDIO_PHONE = "+33 1 02 03 04 05";
-const PROJECT_TYPES = ["Brand", "Editorial", "Web / 3D", "Film", "Autre"] as const;
+const STUDIO_PHONE = "+33 7 78 35 45 35";
+const PROJECT_TYPES = ["Court métrage", "Clip musical", "Publicité", "Institutionnel", "Shooting", "Autre"] as const;
 
 type FocusedField = "name" | "email" | "subject" | "message" | null;
 
@@ -81,9 +81,9 @@ export default function ContactPage() {
 
         <section className="pt-12 pb-32">
           <div className="flex items-baseline justify-between">
-            <div className="micro text-fg-3">⌗ Get in touch · Paris / Remote</div>
+            <div className="micro text-fg-3">Nous écrire</div>
             <div className="micro font-mono-ui text-fg-3">
-              <Clock /> · 48.8566° N
+              <Clock />
             </div>
           </div>
           <div className="hairline mt-3" />
@@ -96,8 +96,7 @@ export default function ContactPage() {
                 <span className="text-accent">.</span>
               </h1>
               <p className="font-display mt-6 max-w-xl text-lg leading-snug text-fg-2 md:text-xl">
-                Un brief, une intuition, un projet à long terme. Écrivez — nous répondons
-                en moins de 48 h.
+                Une idée, un projet ? Écrivez moi, réponse en moins de 48h
               </p>
 
               <form onSubmit={handleSubmit} className="mt-14 flex flex-col gap-7">
@@ -236,37 +235,26 @@ export default function ContactPage() {
               <div className="mt-10">
                 <div className="micro mb-5 text-fg-3">Studio</div>
                 <div className="font-display text-2xl leading-tight tracking-tight md:text-3xl">
-                  17, rue du Faubourg
+                  <span className="italic-display">Basé à Lyon</span>
                   <br />
-                  <span className="italic-display">Saint-Antoine</span>
-                  <br />
-                  75011 Paris
-                </div>
-                <div className="micro-sm mt-4 text-fg-3">
-                  Lun–Ven · 10h00 → 19h00
+                  et mobile pour vos besoins
                 </div>
               </div>
 
-              <div className="mt-10 grid grid-cols-2 gap-3">
-                {[
-                  { k: "Instagram", v: "@elssila.studio", href: "#" },
-                  { k: "Are.na", v: "/elssila", href: "#" },
-                  { k: "Vimeo", v: "/elssila", href: "#" },
-                  { k: "LinkedIn", v: "/elssila", href: "#" },
-                ].map(({ k, v, href }) => (
-                  <a
-                    key={k}
-                    href={href}
-                    className="micro-sm flex items-center justify-between px-4 py-3.5 transition-colors hover:bg-card-hover"
-                    style={{
-                      border: "0.5px solid var(--color-separator)",
-                      color: "var(--color-fg-2)",
-                    }}
-                  >
-                    <span>{k}</span>
-                    <span className="text-fg-3">{v} ↗</span>
-                  </a>
-                ))}
+              <div className="mt-10">
+                <a
+                  href="https://www.instagram.com/el.ssila?utm_source=qr"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="micro-sm flex items-center justify-between px-4 py-3.5 transition-colors hover:bg-card-hover"
+                  style={{
+                    border: "0.5px solid var(--color-separator)",
+                    color: "var(--color-fg-2)",
+                  }}
+                >
+                  <span>Instagram</span>
+                  <span className="text-fg-3">@el.ssila ↗</span>
+                </a>
               </div>
             </aside>
           </div>

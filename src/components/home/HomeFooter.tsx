@@ -33,7 +33,7 @@ const SOCIAL: [string, string][] = [
   ["LinkedIn", "/elssila"],
 ];
 
-const MARQUEE_ITEMS = ["Direction Artistique", "Photography", "Film", "Web&3D"];
+const MARQUEE_ITEMS = ["Photo", "Réalisation", "Direction artistique", "Préproduction", "Production", "Postproduction"];
 
 export function PageFooter() {
   return <HomeFooter showMarquee={false} />;

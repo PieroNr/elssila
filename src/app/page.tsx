@@ -23,7 +23,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="custom-cursor-host relative bg-page text-fg">
+    <main className="relative bg-page text-fg">
       {/* Loader */}
       {showLoader && (
         <motion.div
@@ -37,15 +37,15 @@ export default function Home() {
           }}
         >
           <div className={`${cabinet.className} mb-6 text-xs font-semibold tracking-[0.35em] uppercase text-fg/75`}>
-            Elssila Studio
+            Elssila
           </div>
           <h1 className={`${neima.className} text-center text-4xl tracking-tight leading-tight md:text-5xl md:leading-[1.2]`}>
-            CREATIVE
+            STUDIO
             <br />
-            PRODUCTION
+            AUDIOVISUEL
           </h1>
           <p className={`${cabinet.className} mt-3 text-[0.65rem] tracking-[0.35em] uppercase text-accent`}>
-            Initialising Visual System
+            LISA EYMARD
           </p>
           <div className="mt-7 h-[2px] w-56 overflow-hidden bg-fg/15">
             <motion.div

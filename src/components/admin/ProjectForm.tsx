@@ -6,7 +6,7 @@ import type { ProjectImage, ProjectVideo, ProjectMedia, ProjectCredit, RichTextD
 import type { ProjectRow } from "@/lib/db/projects";
 import RichTextEditor from "./RichTextEditor";
 
-const CATEGORIES = ["Court métrage", "Clips musicaux", "Publicité", "Institutionnel", "Shooting"];
+const CATEGORIES = ["Court métrage", "Clip musical", "Publicité", "Institutionnel", "Shooting"];
 const ASPECTS = ["wide", "tall", "square"] as const;
 
 // ── Video field ────────────────────────────────────────────────────────────

@@ -13,10 +13,11 @@ const BlobScene = dynamic(() => import("@/components/three/BlobScene"), { ssr: f
 
 // Mock-aligned chip lists per service.
 const CHIPS: Record<string, string[]> = {
-  "01": ["Brand", "Strategy", "Editorial"],
-  "02": ["Photo", "Film", "Motion"],
-  "03": ["Web", "WebGL", "Interactive"],
-  "04": ["Editorial", "Social", "Copy"],
+  "01": ["Univers visuel", "Narration", "Brief créatif"],
+  "02": ["Écriture", "Découpage technique", "Storyboard"],
+  "03": ["Repérages", "Tournage", "Prise de son"],
+  "04": ["Montage", "Étalonnage", "Sound design"],
+  "05": ["Portrait", "Événementiel", "Institutionnel"],
 };
 
 export default function HomeServices() {
@@ -95,7 +96,6 @@ export default function HomeServices() {
                   >
                     {s.title}
                   </div>
-                  <div className="italic-display mt-1 text-sm text-fg-3">/{s.en}</div>
                 </div>
                 <div className="hidden gap-1.5 md:flex md:flex-wrap">
                   {(CHIPS[s.id] ?? s.disciplines).map((c) => (
@@ -131,7 +131,6 @@ export default function HomeServices() {
                 <div className="font-display text-xl leading-none transition-colors group-hover:text-accent">
                   {s.title}
                 </div>
-                <div className="italic-display mt-1 text-xs text-fg-3">/{s.en}</div>
               </div>
             </Link>
           ))}

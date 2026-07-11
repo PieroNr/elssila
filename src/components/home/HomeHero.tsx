@@ -99,9 +99,9 @@ export default function HomeHero({ ready, onPastHeroChange }: HomeHeroProps) {
               className="font-display tracking-tight"
               style={{ fontSize: "clamp(48px, 9vw, 128px)", lineHeight: 1.05, letterSpacing: "-0.02em", margin: 0 }}
             >
-              PRODUCTION
+              STUDIO
               <br />
-              VIDEO
+              AUDIOVISUEL
             </motion.h1>
 
             <motion.p variants={heroItem} className="micro mt-4 text-accent">

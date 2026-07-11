@@ -21,7 +21,7 @@ const STORAGE_KEY = "elssila:theme";
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Default to "light"; the inline <script> in layout.tsx already applied the
   // correct data-theme attribute before React hydrates, so there's no flash.
-  const [theme, setThemeState] = useState<Theme>("light");
+  const [theme, setThemeState] = useState<Theme>("dark");
 
   // Sync React state with what's already applied by the inline script
   useEffect(() => {

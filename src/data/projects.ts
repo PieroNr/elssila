@@ -439,7 +439,7 @@ export function getProjectNeighbors(slug: string): { prev: Project; next: Projec
 export const PROJECT_CATEGORIES = [
   "All",
   "Court métrage",
-  "Clips musicaux",
+  "Clip musical",
   "Publicité",
   "Institutionnel",
   "Shooting",

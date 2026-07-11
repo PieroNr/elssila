@@ -54,16 +54,6 @@ export default function ServicesSplit() {
                   {s.fr}
                 </button>
                 <div
-                  className="italic-display mt-1 text-sm transition-opacity"
-                  style={{
-                    color: "var(--color-fg-3)",
-                    opacity: isActive ? 1 : 0.5,
-                  }}
-                >
-                  /{s.en}
-                </div>
-
-                <div
                   className="overflow-hidden transition-[max-height,opacity] duration-500"
                   style={{
                     maxHeight: isActive ? 240 : 0,
@@ -122,18 +112,10 @@ export default function ServicesSplit() {
         </div>
 
         {/* Meta block */}
-        <div className="mt-8 grid grid-cols-2 gap-6">
-          <div>
-            <div className="micro-sm mb-2 text-fg-3">Process</div>
-            <div className="italic-display text-base leading-snug md:text-lg">
-              {active.process ?? "—"}
-            </div>
-          </div>
-          <div>
-            <div className="micro-sm mb-2 text-fg-3">Délai moyen</div>
-            <div className="italic-display text-base leading-snug md:text-lg">
-              {active.duration ?? "—"}
-            </div>
+        <div className="mt-8">
+          <div className="micro-sm mb-2 text-fg-3">Process</div>
+          <div className="italic-display text-base leading-snug md:text-lg">
+            {active.process ?? "—"}
           </div>
         </div>
 

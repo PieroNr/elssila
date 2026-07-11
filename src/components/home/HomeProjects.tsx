@@ -12,11 +12,11 @@ import { Reveal } from "@/components/ui/Reveal";
 
 const KnotScene = dynamic(() => import("@/components/three/KnotScene"), { ssr: false });
 
-// Hard-coded spans replicate the mock layout (4 columns, 4 cells).
 const SPANS: { gridColumn: string; gridRow: string }[] = [
   { gridColumn: "span 2", gridRow: "span 2" },
   { gridColumn: "span 2", gridRow: "span 1" },
   { gridColumn: "span 2", gridRow: "span 1" },
+  { gridColumn: "span 2", gridRow: "span 2" },
   { gridColumn: "span 2", gridRow: "span 2" },
 ];
 
@@ -44,7 +44,7 @@ export default function HomeProjects() {
   }, []);
 
   const wireframeColor = theme === "dark" ? "#2391ff" : "#ff6a00";
-  const projects = featuredProjects.slice(0, 4);
+  const projects = featuredProjects.slice(0, 5);
 
   return (
     <section ref={sectionRef} className="relative overflow-hidden px-6 py-16 md:px-16 md:py-32">

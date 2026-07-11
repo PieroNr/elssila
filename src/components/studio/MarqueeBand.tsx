@@ -4,12 +4,12 @@
 // Pauses when the user opted into reduced motion.
 
 const ITEMS = [
-  "Direction Artistique",
   "Photo",
-  "Film",
-  "Web & 3D",
-  "Editorial",
-  "Motion",
+  "Réalisation",
+  "Direction artistique",
+  "Préproduction",
+  "Production",
+  "Postproduction",
 ];
 
 export default function MarqueeBand() {
