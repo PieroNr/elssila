@@ -101,7 +101,6 @@ export const projects: Project[] = [
   /* ─── 024 ─────────────────────────────────────────────────────────────── */
   {
     slug: "hollow-swine",
-    ref: "024",
     title: "Hollow Swine",
     category: "Editorial",
     year: "2025",
@@ -113,7 +112,6 @@ export const projects: Project[] = [
       "Une revue qui regarde la matière sans pudeur — peau, métal, papier — et compose chaque double-page comme un dialogue entre lumière dure et silence éditorial.",
     body:
       "Direction artistique du numéro 07 sur le thème Hollow. Photographie en studio, post-production minimale, grille typographique 12 colonnes, papier Munken Pure 130g. Quatre essais commandés à des auteurs invités.",
-    format: "260 × 340 mm",
     run: "1 200 ex.",
     tags: ["Photo", "Layout"],
     featured: true,
@@ -138,7 +136,6 @@ export const projects: Project[] = [
   /* ─── 023 ─────────────────────────────────────────────────────────────── */
   {
     slug: "void-campaign",
-    ref: "023",
     title: "Void Campaign",
     category: "Brand",
     year: "2025",
@@ -172,7 +169,6 @@ export const projects: Project[] = [
   /* ─── 022 ─────────────────────────────────────────────────────────────── */
   {
     slug: "thermal",
-    ref: "022",
     title: "Thermal",
     category: "Film",
     year: "2025",
@@ -203,7 +199,6 @@ export const projects: Project[] = [
   /* ─── 021 ─────────────────────────────────────────────────────────────── */
   {
     slug: "noma-manifesto",
-    ref: "021",
     title: "NOMA Manifesto",
     category: "Digital",
     year: "2024",
@@ -237,7 +232,6 @@ export const projects: Project[] = [
   /* ─── 020 ─────────────────────────────────────────────────────────────── */
   {
     slug: "rift-collection",
-    ref: "020",
     title: "Rift Collection",
     category: "Fashion",
     year: "2024",
@@ -266,7 +260,6 @@ export const projects: Project[] = [
   /* ─── 019 ─────────────────────────────────────────────────────────────── */
   {
     slug: "cendres",
-    ref: "019",
     title: "Cendres",
     category: "Editorial",
     year: "2024",
@@ -288,7 +281,6 @@ export const projects: Project[] = [
   /* ─── 018 ─────────────────────────────────────────────────────────────── */
   {
     slug: "atlas-lourd",
-    ref: "018",
     title: "Atlas Lourd",
     category: "Brand",
     year: "2024",
@@ -311,7 +303,6 @@ export const projects: Project[] = [
   /* ─── 017 ─────────────────────────────────────────────────────────────── */
   {
     slug: "archive-iii",
-    ref: "017",
     title: "Archive III",
     category: "Installation",
     year: "2023",
@@ -322,7 +313,6 @@ export const projects: Project[] = [
     intent: "L'image n'est pas un sujet — c'est un événement de l'espace. La scénographie n'illustre rien, elle organise une rencontre.",
     body:
       "120 tirages, 4 salles, 6 semaines d'exposition. Catalogue 96 pages distribué gratuitement.",
-    format: "Tirages 30 × 40 cm",
     run: "120 tirages",
     tags: ["Scéno", "Print", "Argentique"],
     featured: true,
@@ -345,7 +335,6 @@ export const projects: Project[] = [
   /* ─── 016 ─────────────────────────────────────────────────────────────── */
   {
     slug: "halflight",
-    ref: "016",
     title: "Halflight",
     category: "Film",
     year: "2023",
@@ -364,7 +353,6 @@ export const projects: Project[] = [
   /* ─── 015 ─────────────────────────────────────────────────────────────── */
   {
     slug: "glass-house",
-    ref: "015",
     title: "Glass House",
     category: "Digital",
     year: "2023",
@@ -383,7 +371,6 @@ export const projects: Project[] = [
   /* ─── 014 ─────────────────────────────────────────────────────────────── */
   {
     slug: "salt-iron",
-    ref: "014",
     title: "Salt & Iron",
     category: "Editorial",
     year: "2022",
@@ -402,7 +389,6 @@ export const projects: Project[] = [
   /* ─── 013 ─────────────────────────────────────────────────────────────── */
   {
     slug: "cobalt",
-    ref: "013",
     title: "Cobalt",
     category: "Brand",
     year: "2022",
