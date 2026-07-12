@@ -4,7 +4,7 @@ export default function Manifesto() {
   return (
     <section className="mx-auto max-w-6xl px-6 pt-12 pb-16">
       <div className="flex items-baseline justify-between">
-        <div className={`${cabinet.className} micro text-fg-3`}>⌗ Studio · Manifesto</div>
+        <div className={`${cabinet.className} micro text-fg-3`}>⌗ Studio · Manifeste</div>
       </div>
       <div className="hairline mt-3" />
 

@@ -140,7 +140,7 @@ export default function HomeProjects() {
                     transform: isActive ? "translateY(0)" : "translateY(-6px)",
                   }}
                 >
-                  ↗ Open
+                  ↗ Voir
                 </div>
               </Link>
             );

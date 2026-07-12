@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cabinet, neima } from "@/lib/fonts";
 
 const navLinks = [
-  { label: "Projects", href: "/projects" },
+  { label: "Projets", href: "/projects" },
   { label: "Services", href: "/services" },
   { label: "Studio", href: "/studio" },
   { label: "Contact", href: "/contact" },

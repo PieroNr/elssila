@@ -13,14 +13,14 @@ const FG_18 = "rgba(253,242,233,0.18)";
 const FG_10 = "rgba(253,242,233,0.1)";
 
 const STUDIO_LINKS: [string, string][] = [
-  ["Manifesto", "/studio"],
+  ["Manifeste", "/studio"],
   ["Équipe", "/studio#team"],
   ["Presse", "/studio#press"],
   ["Carrières", "/studio#careers"],
 ];
 
 const NAV_LINKS: [string, string][] = [
-  ["Projects", "/projects"],
+  ["Projets", "/projects"],
   ["Services", "/services"],
   ["Studio", "/studio"],
   ["Contact", "/contact"],

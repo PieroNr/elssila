@@ -79,7 +79,7 @@ export default function Home() {
         whileTap={{ scale: 0.94 }}
         className={`${cabinet.className} fixed bottom-6 right-6 z-[70] border border-fg/60 bg-page/80 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-fg backdrop-blur-sm transition-colors hover:bg-fg hover:text-page`}
       >
-        <span suppressHydrationWarning>{theme === "dark" ? "Light mode" : "Dark mode"}</span>
+        <span suppressHydrationWarning>{theme === "dark" ? "Mode clair" : "Mode sombre"}</span>
       </motion.button>
 
       <ScrollIndicator visible={!showLoader && !pastHero} isDark={theme === "dark"} />

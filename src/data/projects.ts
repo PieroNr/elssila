@@ -421,7 +421,7 @@ export function getProjectNeighbors(slug: string): { prev: Project; next: Projec
 
 /** Unique categories — used by the Archive filter chips. */
 export const PROJECT_CATEGORIES = [
-  "All",
+  "Tous",
   "Court métrage",
   "Clip musical",
   "Publicité",

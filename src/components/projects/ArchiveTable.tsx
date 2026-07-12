@@ -15,7 +15,7 @@ const CARD_H = 430;
 // hover a row to surface a cursor-following preview card (desktop only).
 
 export default function ArchiveTable({ projects }: { projects: Project[] }) {
-  const [filter, setFilter] = useState<string>("All");
+  const [filter, setFilter] = useState<string>("Tous");
   const [sort, setSort] = useState<SortKey>("year");
   const [hoverSlug, setHoverSlug] = useState<string | null>(null);
 
@@ -34,7 +34,7 @@ export default function ArchiveTable({ projects }: { projects: Project[] }) {
   };
 
   const list = useMemo<Project[]>(() => {
-    let l = filter === "All" ? projects : projects.filter((p) => p.category === filter);
+    let l = filter === "Tous" ? projects : projects.filter((p) => p.category === filter);
     if (sort === "year") {
       l = [...l].sort((a, b) => Number(b.year) - Number(a.year));
     } else {
@@ -71,7 +71,7 @@ export default function ArchiveTable({ projects }: { projects: Project[] }) {
           })}
         </div>
         <div className="micro-sm flex items-center gap-4 text-fg-3">
-          <span>Sort by</span>
+          <span>Trier par</span>
           {(["year", "title"] as const).map((s) => (
             <button
               key={s}
@@ -84,7 +84,7 @@ export default function ArchiveTable({ projects }: { projects: Project[] }) {
                 textUnderlineOffset: "4px",
               }}
             >
-              {s.toUpperCase()}
+              {s === "year" ? "ANNÉE" : "TITRE"}
             </button>
           ))}
         </div>
@@ -99,7 +99,7 @@ export default function ArchiveTable({ projects }: { projects: Project[] }) {
           borderColor: "var(--color-separator)",
         }}
       >
-        {["№", "Title", "Category", "Year", "Client", ""].map((h, i) => (
+        {["№", "Titre", "Catégorie", "Année", "Client", ""].map((h, i) => (
           <div key={i} className="micro-sm text-fg-3">
             {h}
           </div>
