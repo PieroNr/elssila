@@ -19,7 +19,7 @@ const heroItem = {
   visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.75, ease: EASE } },
 };
 
-const BustScene = dynamic<{ animate: boolean; wireframeColor: string; isDark: boolean }>(
+const BustScene = dynamic<{ animate: boolean; wireframeColor: string; isDark: boolean; isMobile: boolean }>(
   () => import("@/components/three/BustScene"),
   { ssr: false },
 );
@@ -37,6 +37,15 @@ export default function HomeHero({ ready, onPastHeroChange }: HomeHeroProps) {
   const heroSentinelRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [bustVisible, setBustVisible] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    setIsMobile(mq.matches);
+    const fn = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", fn);
+    return () => mq.removeEventListener("change", fn);
+  }, []);
 
   useEffect(() => {
     const el = wrapperRef.current;
@@ -63,30 +72,23 @@ export default function HomeHero({ ready, onPastHeroChange }: HomeHeroProps) {
     <div ref={wrapperRef} className="relative">
       {/* Bust 3D — spans hero + showreel, always mounted to avoid context churn */}
       {!lite && (
-        <div className="pointer-events-none absolute inset-0 z-0">
-          <BustScene animate={ready && bustVisible} wireframeColor={wireframeColor} isDark={theme === "dark"} />
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-screen md:inset-0 md:h-auto">
+          <BustScene animate={ready && bustVisible} wireframeColor={wireframeColor} isDark={theme === "dark"} isMobile={isMobile} />
         </div>
       )}
 
       {/* HERO */}
-      {/* Mobile: min-h auto so bust isn't clipped; desktop: full screen */}
-      <section className="relative flex min-h-[80vh] items-center justify-center overflow-hidden px-6 pt-16 pb-8 md:min-h-screen md:pt-0 md:pb-0">
-        <div className="relative z-[2] flex max-w-2xl flex-col items-center text-center">
+      <section className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 pt-16 pb-8 md:pt-0 md:pb-0">
+        {/* Gradient au bas de la section sur mobile — fond qui remonte pour lisibilité du texte */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[55%] bg-gradient-to-t from-[var(--color-page)] via-[var(--color-page)]/60 to-transparent md:hidden"
+        />
+        <div className="relative z-[2] flex max-w-2xl flex-col items-center text-center -mt-[20vh] md:mt-0">
           <div
             aria-hidden
-            className="pointer-events-none absolute -inset-x-16 -inset-y-10 rounded-[999px] bg-[var(--color-hero-glow)] blur-3xl"
+            className="pointer-events-none absolute -inset-x-20 -inset-y-8 rounded-[999px] bg-[var(--color-hero-glow)] opacity-80 blur-[80px]"
           />
-
-          {/* Mobile bust — positioned above title, desktop is handled by absolute BustScene */}
-          {!lite && (
-            <div
-              aria-hidden
-              className="pointer-events-none relative z-0 -mt-4 mb-2 h-[240px] w-full md:hidden"
-            >
-              {/* Gradient mask so bust blends into title below */}
-              <div className="absolute inset-x-0 bottom-0 z-10 h-16 bg-gradient-to-t from-[var(--color-page)] to-transparent" />
-            </div>
-          )}
 
           <motion.div
             className="relative z-[1]"
@@ -138,7 +140,7 @@ function Showreel() {
   const [loaded, setLoaded] = useState(false);
 
   return (
-    <section className="relative">
+    <section className="relative flex min-h-[100dvh] flex-col md:block md:min-h-0">
       <Reveal className="mx-auto max-w-6xl px-6 pt-12 md:pt-24">
         <div className="flex items-baseline justify-between">
           <span className="micro text-fg-3">⌗ Showreel</span>
@@ -146,7 +148,7 @@ function Showreel() {
         <div className="hairline mt-3" />
       </Reveal>
 
-      <div className="relative mt-4 w-full overflow-hidden" style={{ aspectRatio: "16/9" }}>
+      <div className="relative mt-4 flex-1 overflow-hidden md:flex-none md:aspect-video">
         {loaded ? (
           <iframe
             src="https://www.youtube.com/embed/oUt0rwGF37k?autoplay=1&rel=0&modestbranding=1"
@@ -161,7 +163,7 @@ function Showreel() {
             <img
               src="/showreel-thumb.jpg"
               alt="Showreel Elssila Studio"
-              className="absolute inset-0 h-full w-full object-cover"
+              className="absolute inset-0 h-full w-full object-cover object-[45%_center]"
             />
             <div className="pointer-events-none absolute inset-0 bg-black/40" />
             <div className="pointer-events-none absolute inset-0 opacity-15 noise-overlay" />
@@ -174,12 +176,12 @@ function Showreel() {
                 aria-label="Lancer le showreel"
                 className="flex h-16 w-16 items-center justify-center rounded-full border border-white/40 bg-white/15 text-base text-white backdrop-blur-md transition-transform hover:scale-110 md:h-24 md:w-24 md:text-xl"
               >
-                ▶
+                ▶︎
               </button>
             </div>
 
             <div className="absolute bottom-0 left-0 right-0 flex items-end px-4 py-4 md:px-8 md:py-5">
-              <span className="micro text-white/85">▌ Travaux sélectionnés · 2025 — 2026</span>
+              <span className="micro text-white/85">▌︎ Travaux sélectionnés · 2025 — 2026</span>
             </div>
           </>
         )}
@@ -193,7 +195,7 @@ function Showreel() {
           rel="noopener noreferrer"
           className="micro text-accent"
         >
-          → Voir le showreel
+          →︎ Voir le showreel
         </a>
       </div>
     </section>

@@ -151,7 +151,7 @@ export default function ArchiveTable({ projects }: { projects: Project[] }) {
                   {p.category} · {p.year}
                 </div>
               </div>
-              <span aria-hidden className="text-fg-4">→</span>
+              <span aria-hidden className="text-fg-4">→︎</span>
             </div>
           </Link>
         ))}
@@ -182,7 +182,7 @@ export default function ArchiveTable({ projects }: { projects: Project[] }) {
             </div>
             <div className="p-4">
               <div className="font-mono-ui text-[9px] tracking-[0.2em] opacity-60">
-                ▌ {hovered.year}
+                ▌︎ {hovered.year}
               </div>
               <div className="font-display mt-2 text-xl leading-tight tracking-tight">
                 {hovered.title}

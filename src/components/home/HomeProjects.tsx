@@ -81,8 +81,8 @@ export default function HomeProjects() {
           >
             Projets<span className="text-accent">.</span>
           </h2>
-          <Link href="/projects" className="micro pb-3 text-fg-2 transition-colors hover:text-accent">
-            Tous les projets →
+          <Link href="/projects" className="micro pb-3 text-fg-2 transition-colors hover:text-accent hidden md:block">
+            Tous les projets →︎
           </Link>
         </Reveal>
 
@@ -147,9 +147,9 @@ export default function HomeProjects() {
           })}
         </div>
 
-        {/* Mobile: 2-column compact grid */}
+        {/* Mobile: 2×2 grid (4 projets) + bouton TOUS */}
         <div className="mt-8 grid grid-cols-2 gap-2 md:hidden">
-          {projects.map((p) => (
+          {projects.slice(0, 4).map((p) => (
             <Link
               key={p.slug}
               href={`/projects/${p.slug}`}
@@ -164,6 +164,14 @@ export default function HomeProjects() {
               </div>
             </Link>
           ))}
+        </div>
+        <div className="mt-4 md:hidden">
+          <Link
+            href="/projects"
+            className="flex w-full items-center justify-center gap-3 bg-accent py-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-white transition-colors hover:bg-accent-hover"
+          >
+            TOUS LES PROJETS <span aria-hidden>→︎</span>
+          </Link>
         </div>
       </div>
     </section>

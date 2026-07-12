@@ -33,7 +33,7 @@ export default async function ProjectsPage() {
 
         <section className="pt-12 pb-32">
           <div className="flex items-baseline justify-between">
-            <div className="micro text-fg-3">⌗ Projets · 2025 → 2026</div>
+            <div className="micro text-fg-3">⌗ Projets · 2025 →︎ 2026</div>
           </div>
           <div className="hairline mt-3" />
 

@@ -1,10 +1,10 @@
 type Member = { name: string; role: string; city: string };
 
 const TEAM: Member[] = [
-  { name: "Camille L.", role: "Co-fondatrice · DA", city: "Paris" },
-  { name: "Marin A.", role: "Co-fondateur · 3D", city: "Paris" },
+  { name: "Camille L.", role: "Co-fondatrice · DA", city: "Lyon" },
+  { name: "Marin A.", role: "Co-fondateur · 3D", city: "Lyon" },
   { name: "Iris B.", role: "Photographie", city: "Bruxelles" },
-  { name: "Théo K.", role: "Motion · Code", city: "Paris" },
+  { name: "Théo K.", role: "Motion · Code", city: "Lyon" },
   { name: "Léa S.", role: "Editorial · Strat.", city: "Lyon" },
   { name: "Studio +", role: "Auteurs invités", city: "—" },
 ];

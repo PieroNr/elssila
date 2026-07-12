@@ -207,7 +207,7 @@ export default function ContactPage() {
                     type="submit"
                     className="bg-accent px-10 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] text-white transition-colors hover:bg-accent-hover"
                   >
-                    Envoyer →
+                    Envoyer →︎
                   </button>
                 </div>
               </form>
@@ -221,7 +221,7 @@ export default function ContactPage() {
               >
                 <div className="mb-3 flex items-baseline justify-between">
                   <span className="micro-sm font-mono-ui text-fg-3">
-                    ▌STUDIO ACTIVITY · LIVE
+                    ▌︎STUDIO ACTIVITY · LIVE
                   </span>
                   <span className="micro-sm text-accent">● REC</span>
                 </div>

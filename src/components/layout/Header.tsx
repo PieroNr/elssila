@@ -115,7 +115,7 @@ export default function Header() {
               );
             })}
             <div className="mt-8 text-xs tracking-[0.2em] uppercase text-fg-4">
-              Studio Paris · Est. 2019
+              ELSSILA · 2026
             </div>
           </motion.nav>
         )}

@@ -11,15 +11,18 @@ type BustSceneProps = {
   animate: boolean;
   wireframeColor?: string;
   isDark?: boolean;
+  isMobile?: boolean;
 };
 
 function DanceModel({
   color,
   animate,
+  isMobile,
   onReady,
 }: {
   color: string;
   animate: boolean;
+  isMobile: boolean;
   onReady: () => void;
 }) {
   const group = useRef<Group>(null);
@@ -113,7 +116,12 @@ function DanceModel({
   });
 
   return (
-    <group ref={group} position={[0, -1, 0]} scale={0.3} rotation={[0, Math.PI, 0]}>
+    <group
+      ref={group}
+      position={isMobile ? [0, -10.8, 0] : [0, -1, 0]}
+      scale={isMobile ? 0.34 : 0.3}
+      rotation={[0, Math.PI, 0]}
+    >
       <primitive object={scene} />
     </group>
   );
@@ -121,7 +129,7 @@ function DanceModel({
 
 useGLTF.preload("/models/Dance.glb");
 
-export default function BustScene({ animate, wireframeColor = "#2391ff" }: BustSceneProps) {
+export default function BustScene({ animate, wireframeColor = "#2391ff", isMobile = false }: BustSceneProps) {
   const [modelReady, setModelReady] = useState(false);
   const visible = animate && modelReady;
   const canvasStyle = {
@@ -133,7 +141,7 @@ export default function BustScene({ animate, wireframeColor = "#2391ff" }: BustS
 
   return (
     <Canvas
-      camera={{ position: [0, 7, 40], fov: 55 }}
+      camera={{ position: isMobile ? [0, 4, 23] : [0, 7, 40], fov: isMobile ? 58 : 55 }}
       dpr={[1, 1.5]}
       gl={{
         alpha: true,
@@ -156,6 +164,7 @@ export default function BustScene({ animate, wireframeColor = "#2391ff" }: BustS
       <DanceModel
         color={wireframeColor}
         animate={animate}
+        isMobile={isMobile}
         onReady={() => setModelReady(true)}
       />
       <EffectComposer multisampling={0}>

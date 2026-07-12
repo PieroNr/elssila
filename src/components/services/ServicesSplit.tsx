@@ -88,7 +88,7 @@ export default function ServicesSplit() {
                   transform: isActive ? "translateX(4px)" : "translateX(0)",
                 }}
               >
-                →
+                →︎
               </span>
             </li>
           );
@@ -104,7 +104,7 @@ export default function ServicesSplit() {
           <ServiceGlyph kind={active.glyph} />
           <div className="pointer-events-none absolute inset-0 opacity-15 noise-overlay" />
           <div className="micro-sm font-mono-ui pointer-events-none absolute left-4 top-4 text-fg-3">
-            ▌{active.glyph.toUpperCase()} · WIREFRAME
+            ▌︎{active.glyph.toUpperCase()} · WIREFRAME
           </div>
           <div className="micro-sm font-mono-ui pointer-events-none absolute right-4 bottom-4 text-fg-3">
             {active.id}/04
@@ -123,7 +123,7 @@ export default function ServicesSplit() {
           href="/contact"
           className="mt-10 block w-full bg-accent px-8 py-4 text-center text-xs font-semibold uppercase tracking-[0.22em] text-white transition-colors hover:bg-accent-hover"
         >
-          Démarrer un projet →
+          Démarrer un projet →︎
         </Link>
       </div>
     </div>

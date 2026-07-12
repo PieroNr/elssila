@@ -24,7 +24,7 @@ export default function Footer() {
             className={`${cabinet.className} inline-flex items-center gap-3 rounded-none bg-accent px-8 py-3.5 text-xs font-semibold uppercase tracking-[0.22em] text-white transition-colors hover:bg-accent-hover`}
           >
             Nous contacter
-            <span aria-hidden>→</span>
+            <span aria-hidden>→︎</span>
           </Link>
         </div>
 
@@ -79,7 +79,7 @@ export default function Footer() {
             >
               {STUDIO_EMAIL}
             </a>
-            <p className={`${cabinet.className} mt-3 text-sm text-fg-3`}>Paris · Sur rendez-vous</p>
+            <p className={`${cabinet.className} mt-3 text-sm text-fg-3`}>Lyon · Sur rendez-vous</p>
           </div>
         </div>
 

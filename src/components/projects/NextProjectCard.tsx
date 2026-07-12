@@ -3,7 +3,7 @@ import type { Project } from "@/data/projects";
 
 type Props = { project: Project };
 
-// Inverted "Next →" card — fg background, page color text. Acts as the
+// Inverted "Next →︎" card — fg background, page color text. Acts as the
 // outbound CTA at the end of a project page, leading the reader into the
 // neighboring project.
 
@@ -13,7 +13,7 @@ export default function NextProjectCard({ project }: Props) {
       href={`/projects/${project.slug}`}
       className="group relative block overflow-hidden bg-fg p-8 text-page transition-colors hover:bg-fg-2 md:p-10"
     >
-      <div className="micro-sm mb-5 opacity-60">Projet suivant →</div>
+      <div className="micro-sm mb-5 opacity-60">Projet suivant →︎</div>
       <div className="font-display line-clamp-3 text-4xl leading-[0.95] tracking-tight md:text-5xl">
         {(() => {
           const maxChars = 17;

@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Force text presentation for arrow/symbol characters — prevents iOS emoji rendering */
+* { font-variant-emoji: text; }
+
 /* ─── Design tokens ──────────────────────────────────────────────────────────
    Registered via @theme so Tailwind utilities (bg-page, text-fg, etc.) resolve
    through CSS custom properties. Dark-mode overrides below win via cascade.

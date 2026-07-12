@@ -74,8 +74,8 @@ export default function HomeServices() {
             <span className="italic-display">Services</span>
             <span className="text-accent">.</span>
           </h2>
-          <Link href="/services" className="micro pb-3 text-fg-2 transition-colors hover:text-accent">
-            Tous les services →
+          <Link href="/services" className="micro pb-3 text-fg-2 transition-colors hover:text-accent hidden md:block">
+            Tous les services →︎
           </Link>
         </Reveal>
 
@@ -111,7 +111,7 @@ export default function HomeServices() {
                   whileHover={{ x: 8 }}
                   transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 >
-                  →
+                  →︎
                 </motion.span>
               </Link>
             </Reveal>
@@ -119,7 +119,7 @@ export default function HomeServices() {
           ))}
         </ul>
 
-        {/* Mobile: 2×2 grid */}
+        {/* Mobile: 2×2 grid + bouton */}
         <div className="mt-8 grid grid-cols-2 gap-2 md:hidden">
           {services.map((s) => (
             <Link
@@ -136,6 +136,14 @@ export default function HomeServices() {
               </div>
             </Link>
           ))}
+        </div>
+        <div className="mt-4 md:hidden">
+          <Link
+            href="/services"
+            className="flex w-full items-center justify-center gap-3 bg-accent py-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-white transition-colors hover:bg-accent-hover"
+          >
+            TOUS LES SERVICES <span aria-hidden>→︎</span>
+          </Link>
         </div>
       </div>
     </section>
