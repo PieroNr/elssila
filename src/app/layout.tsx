@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { cabinet, neima } from "@/lib/fonts";
 import { ThemeProvider } from "@/lib/theme";
+import { LanguageProvider } from "@/lib/language";
 import SuppressR3FWarnings from "@/components/layout/SuppressR3FWarnings";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next"
@@ -141,10 +142,12 @@ export default function RootLayout({
       <body
         className={`${cabinet.variable} ${neima.variable} font-cabinet antialiased`}
       >
-        <ThemeProvider>
-          <SuppressR3FWarnings />
-          {children}
-        </ThemeProvider>
+        <LanguageProvider>
+          <ThemeProvider>
+            <SuppressR3FWarnings />
+            {children}
+          </ThemeProvider>
+        </LanguageProvider>
       </body>
       <Analytics />
     </html>

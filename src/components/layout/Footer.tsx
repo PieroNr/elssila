@@ -1,10 +1,15 @@
+"use client";
+
 import Link from "next/link";
 import { cabinet, neima } from "@/lib/fonts";
+import { useLang, t } from "@/lib/language";
+import LangSwitcher from "@/components/ui/LangSwitcher";
 
 const STUDIO_EMAIL = "elssila.pro@gmail.com";
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const { lang } = useLang();
 
   return (
     <footer className="relative z-10 border-t border-fg/10 bg-page text-fg">
@@ -14,16 +19,16 @@ export default function Footer() {
           <h2
             className={`${neima.className} max-w-2xl text-4xl leading-[1.05] tracking-tight md:text-6xl`}
           >
-            Discutons de votre
-            <br />
-            prochain projet.
+            {t.footer.cta[lang].split("\n").map((line, i) => (
+              <span key={i}>{line}{i === 0 && <br />}</span>
+            ))}
           </h2>
 
           <Link
             href="/contact"
             className={`${cabinet.className} inline-flex items-center gap-3 rounded-none bg-accent px-8 py-3.5 text-xs font-semibold uppercase tracking-[0.22em] text-white transition-colors hover:bg-accent-hover`}
           >
-            Nous contacter
+            {t.footer.cta_btn[lang]}
             <span aria-hidden>→︎</span>
           </Link>
         </div>
@@ -40,13 +45,14 @@ export default function Footer() {
             <p className={`${cabinet.className} mt-3 max-w-xs text-sm leading-relaxed text-fg-2`}>
               Direction artistique, photo et vidéo pour la mode, le luxe et la culture.
             </p>
+            <LangSwitcher className="mt-4" />
           </div>
 
           <div>
             <div
               className={`${cabinet.className} mb-4 text-[0.55rem] tracking-[0.32em] uppercase text-fg-3`}
             >
-              Naviguer
+              {t.footer.navigate[lang]}
             </div>
             <ul className={`${cabinet.className} flex flex-col gap-2 text-sm`}>
               <li>
@@ -71,7 +77,7 @@ export default function Footer() {
             <div
               className={`${cabinet.className} mb-4 text-[0.55rem] tracking-[0.32em] uppercase text-fg-3`}
             >
-              Contact direct
+              {t.footer.contact[lang]}
             </div>
             <a
               href={`mailto:${STUDIO_EMAIL}`}
@@ -79,7 +85,7 @@ export default function Footer() {
             >
               {STUDIO_EMAIL}
             </a>
-            <p className={`${cabinet.className} mt-3 text-sm text-fg-3`}>Lyon · Sur rendez-vous</p>
+            <p className={`${cabinet.className} mt-3 text-sm text-fg-3`}>{t.footer.rendez_vous[lang]}</p>
           </div>
         </div>
 

@@ -6,16 +6,19 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cabinet, neima } from "@/lib/fonts";
 
-const navLinks = [
-  { label: "Projets", href: "/projects" },
-  { label: "Services", href: "/services" },
-  { label: "Studio", href: "/studio" },
-  { label: "Contact", href: "/contact" },
-];
+import { useLang, t } from "@/lib/language";
 
 export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const { lang } = useLang();
+
+  const navLinks = [
+    { label: t.nav.projects[lang], href: "/projects" },
+    { label: t.nav.services[lang], href: "/services" },
+    { label: t.nav.studio[lang],   href: "/studio" },
+    { label: t.nav.contact[lang],  href: "/contact" },
+  ];
 
   return (
     <div className="pb-2">
@@ -109,7 +112,7 @@ export default function Header() {
                     style={{ borderColor: "var(--color-separator)" }}
                   >
                     <span className={`${neima.className} italic`}>{label}</span>
-                    <span className="text-fg-4 text-base">↗</span>
+                    <span className="text-fg-4 text-base">↗︎</span>
                   </Link>
                 </motion.div>
               );

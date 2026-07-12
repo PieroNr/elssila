@@ -39,7 +39,7 @@ export default function NextProjectCard({ project }: Props) {
         className="absolute right-5 bottom-5 text-3xl text-accent-vivid transition-transform duration-300 group-hover:translate-x-1 md:right-7 md:bottom-7"
         aria-hidden
       >
-        ↗
+        ↗︎
       </div>
     </Link>
   );

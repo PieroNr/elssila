@@ -67,7 +67,7 @@ export default function SpreadVideoPlayer({ src, alt }: { src: string; alt: stri
               aria-label={`Lancer la vidéo : ${alt || "vidéo"}`}
               className="flex h-16 w-16 items-center justify-center rounded-full border border-white/40 bg-white/15 text-base text-white backdrop-blur-md transition-transform hover:scale-110 md:h-20 md:w-20 md:text-lg"
             >
-              ▶
+              ▶︎
             </button>
           </div>
 

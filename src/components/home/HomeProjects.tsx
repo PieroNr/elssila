@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { featuredProjects as staticFeatured, type Project } from "@/data/projects";
 import { useTheme } from "@/lib/theme";
 import { useLiteMode } from "@/lib/lite-mode";
+import { useLang, t } from "@/lib/language";
 import { Reveal } from "@/components/ui/Reveal";
 
 const KnotScene = dynamic(() => import("@/components/three/KnotScene"), { ssr: false });
@@ -23,6 +24,7 @@ const SPANS: { gridColumn: string; gridRow: string }[] = [
 export default function HomeProjects() {
   const { theme } = useTheme();
   const lite = useLiteMode();
+  const { lang } = useLang();
   const [hoverSlug, setHoverSlug] = useState<string | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const [knotVisible, setKnotVisible] = useState(false);
@@ -69,7 +71,7 @@ export default function HomeProjects() {
       <div className="relative z-[1] mx-auto max-w-6xl">
         <Reveal>
           <div className="flex items-baseline justify-between">
-            <span className="micro text-fg-3">⌗ Travaux sélectionnés</span>
+            <span className="micro text-fg-3">{t.projects.section[lang]}</span>
           </div>
           <div className="hairline mt-3" />
         </Reveal>
@@ -79,10 +81,10 @@ export default function HomeProjects() {
             className="font-display"
             style={{ fontSize: "clamp(64px, 9vw, 128px)", lineHeight: 0.92, letterSpacing: "-0.02em", margin: 0 }}
           >
-            Projets<span className="text-accent">.</span>
+            {t.projects.title[lang]}<span className="text-accent">.</span>
           </h2>
           <Link href="/projects" className="micro pb-3 text-fg-2 transition-colors hover:text-accent hidden md:block">
-            Tous les projets →︎
+            {t.projects.all_link[lang]}
           </Link>
         </Reveal>
 
@@ -140,7 +142,7 @@ export default function HomeProjects() {
                     transform: isActive ? "translateY(0)" : "translateY(-6px)",
                   }}
                 >
-                  ↗ Voir
+                  {t.projects.open[lang]}
                 </div>
               </Link>
             );
@@ -170,7 +172,7 @@ export default function HomeProjects() {
             href="/projects"
             className="flex w-full items-center justify-center gap-3 bg-accent py-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-white transition-colors hover:bg-accent-hover"
           >
-            TOUS LES PROJETS <span aria-hidden>→︎</span>
+            {t.projects.all_btn[lang]} <span aria-hidden>→︎</span>
           </Link>
         </div>
       </div>

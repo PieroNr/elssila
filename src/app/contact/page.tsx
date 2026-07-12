@@ -253,7 +253,7 @@ export default function ContactPage() {
                   }}
                 >
                   <span>Instagram</span>
-                  <span className="text-fg-3">@el.ssila ↗</span>
+                  <span className="text-fg-3">@el.ssila ↗︎</span>
                 </a>
               </div>
             </aside>

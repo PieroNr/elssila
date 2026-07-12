@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import LangSwitcher from "@/components/ui/LangSwitcher";
+import { useLang, t } from "@/lib/language";
 
 // Always-dark footer (independent of theme). Hard-coded colors are intentional.
 const BG = "#01060d";
@@ -19,12 +21,12 @@ const STUDIO_LINKS: [string, string][] = [
   ["Carrières", "/studio#careers"],
 ];
 
-const NAV_LINKS: [string, string][] = [
-  ["Projets", "/projects"],
-  ["Services", "/services"],
-  ["Studio", "/studio"],
-  ["Contact", "/contact"],
-];
+const NAV_LINK_HREFS: [string, string][] = [
+  ["/projects", "projects"],
+  ["/services", "services"],
+  ["/studio", "studio"],
+  ["/contact", "contact"],
+] as const;
 
 const SOCIAL: [string, string][] = [
   ["Instagram", "@elssila.studio"],
@@ -40,6 +42,7 @@ export function PageFooter() {
 }
 
 export default function HomeFooter({ showMarquee = true }: { showMarquee?: boolean }) {
+  const { lang } = useLang();
   return (
     <footer
       className="relative overflow-hidden pt-12 pb-6 md:pt-24 md:pb-8"
@@ -60,7 +63,7 @@ export default function HomeFooter({ showMarquee = true }: { showMarquee?: boole
 
       <div className="relative mx-auto max-w-6xl px-6 md:px-16">
         <div className="micro" style={{ color: FG_50 }}>
-          ⌗ Nous écrire
+          {t.home_footer.tag[lang]}
         </div>
         <div className="mt-3 h-[0.5px] w-full" style={{ background: FG_18 }} />
 
@@ -74,11 +77,7 @@ export default function HomeFooter({ showMarquee = true }: { showMarquee?: boole
             margin: "24px 0 0",
           }}
         >
-          Un projet,{" "}
-          <span className="italic-display" style={{ color: "var(--color-accent-vivid)" }}>
-            une idée
-          </span>{" "}
-          ?
+          {lang === "fr" ? <>Un projet,{" "}<span className="italic-display" style={{ color: "var(--color-accent-vivid)" }}>une idée</span>{" "}?</> : <>A project,{" "}<span className="italic-display" style={{ color: "var(--color-accent-vivid)" }}>an idea</span>?</>}
         </h3>
 
         <div className="mt-7 flex flex-wrap gap-2.5 md:mt-10 md:gap-3.5">
@@ -86,7 +85,7 @@ export default function HomeFooter({ showMarquee = true }: { showMarquee?: boole
             href="/contact"
             className="bg-accent px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-white transition-colors hover:bg-accent-hover md:px-9 md:py-3.5"
           >
-            Démarrer un projet
+            {t.home_footer.cta_btn[lang]}
           </Link>
           <a
             href="mailto:elssila.pro@gmail.com"
@@ -108,17 +107,17 @@ export default function HomeFooter({ showMarquee = true }: { showMarquee?: boole
               Elssila
             </div>
             <p className="mt-2 text-sm leading-relaxed md:mt-3 md:max-w-xs" style={{ color: FG_60 }}>
-              Studio de production audiovisuelle.
-              Direction artistique, réalisation et photographie.
+              {t.home_footer.desc[lang].split("\n").map((line, i) => <span key={i}>{line}{i === 0 && <br />}</span>)}
             </p>
+            <LangSwitcher className="mt-4" />
           </div>
 
           {/* Navigation col */}
           <div>
-            <div className="micro-sm mb-3" style={{ color: FG_40 }}>Navigation</div>
-            {NAV_LINKS.map(([l, h]) => (
-              <Link key={l} href={h} className="block py-1.5 text-sm transition-colors hover:text-white" style={{ color: "rgba(253,242,233,0.85)" }}>
-                {l}
+            <div className="micro-sm mb-3" style={{ color: FG_40 }}>{t.home_footer.nav_label[lang]}</div>
+            {NAV_LINK_HREFS.map(([h, key]) => (
+              <Link key={h} href={h} className="block py-1.5 text-sm transition-colors hover:text-white" style={{ color: "rgba(253,242,233,0.85)" }}>
+                {t.nav[key as keyof typeof t.nav][lang]}
               </Link>
             ))}
           </div>
@@ -153,7 +152,7 @@ export default function HomeFooter({ showMarquee = true }: { showMarquee?: boole
         {/* Bottom row */}
         <div className="mt-6 flex flex-wrap items-center justify-between gap-3 md:mt-8 md:gap-4">
           <span className="micro-sm" style={{ color: FG_40 }}>
-            © Elssila Studio · Tous droits réservés
+            {t.home_footer.copy[lang]}
           </span>
           <span className="micro-sm font-mono-ui hidden md:inline" style={{ color: FG_40 }}>
             VOL. 01 · ISO 400 · v1.0

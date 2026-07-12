@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "@/lib/theme";
 import { useLiteMode } from "@/lib/lite-mode";
+import { useLang, t } from "@/lib/language";
 import { Reveal } from "@/components/ui/Reveal";
 
 const heroContainer = {
@@ -32,6 +33,7 @@ type HomeHeroProps = {
 export default function HomeHero({ ready, onPastHeroChange }: HomeHeroProps) {
   const { theme } = useTheme();
   const lite = useLiteMode();
+  const { lang } = useLang();
   const wireframeColor = theme === "dark" ? "#2391ff" : "#ff6a00";
 
   const heroSentinelRef = useRef<HTMLDivElement>(null);
@@ -107,7 +109,7 @@ export default function HomeHero({ ready, onPastHeroChange }: HomeHeroProps) {
             </motion.h1>
 
             <motion.p variants={heroItem} className="micro mt-4 text-accent">
-              vidéaste photographe et directrice artistique audiovisuelle
+              {t.hero.subtitle[lang]}
             </motion.p>
 
             <motion.div variants={heroItem} className="mt-8 flex flex-wrap justify-center gap-3">
@@ -115,13 +117,13 @@ export default function HomeHero({ ready, onPastHeroChange }: HomeHeroProps) {
                 href="/projects"
                 className="bg-accent px-7 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-white transition-colors hover:bg-accent-hover md:px-9 md:py-3.5"
               >
-                Voir les projets
+                {t.hero.cta_work[lang]}
               </Link>
               <Link
                 href="/contact"
                 className="border border-fg/60 px-7 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-fg transition-colors hover:bg-fg hover:text-page md:px-9 md:py-3.5"
               >
-                Discutons-en
+                {t.hero.cta_contact[lang]}
               </Link>
             </motion.div>
           </motion.div>
@@ -138,6 +140,7 @@ export default function HomeHero({ ready, onPastHeroChange }: HomeHeroProps) {
 
 function Showreel() {
   const [loaded, setLoaded] = useState(false);
+  const { lang } = useLang();
 
   return (
     <section className="relative flex min-h-[100dvh] flex-col md:block md:min-h-0">
@@ -181,21 +184,21 @@ function Showreel() {
             </div>
 
             <div className="absolute bottom-0 left-0 right-0 flex items-end px-4 py-4 md:px-8 md:py-5">
-              <span className="micro text-white/85">▌︎ Travaux sélectionnés · 2025 — 2026</span>
+              <span className="micro text-white/85">{t.hero.selected[lang]}</span>
             </div>
           </>
         )}
       </div>
 
       <div className="mx-auto mt-4 flex max-w-6xl items-center justify-between px-6 pb-16 md:pb-24">
-        <span className="micro text-fg-3">vidéaste photographe et directrice artistique audiovisuelle</span>
+        <span className="micro text-fg-3">{t.hero.subtitle[lang]}</span>
         <a
           href="https://youtu.be/oUt0rwGF37k"
           target="_blank"
           rel="noopener noreferrer"
           className="micro text-accent"
         >
-          →︎ Voir le showreel
+          {t.hero.see_reel[lang]}
         </a>
       </div>
     </section>

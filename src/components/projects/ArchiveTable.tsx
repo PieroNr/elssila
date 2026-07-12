@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { PROJECT_CATEGORIES, type Project } from "@/data/projects";
+import { useLang, t } from "@/lib/language";
 
 type SortKey = "year" | "title";
 
@@ -15,6 +16,7 @@ const CARD_H = 430;
 // hover a row to surface a cursor-following preview card (desktop only).
 
 export default function ArchiveTable({ projects }: { projects: Project[] }) {
+  const { lang } = useLang();
   const [filter, setFilter] = useState<string>("Tous");
   const [sort, setSort] = useState<SortKey>("year");
   const [hoverSlug, setHoverSlug] = useState<string | null>(null);
@@ -65,13 +67,13 @@ export default function ArchiveTable({ projects }: { projects: Project[] }) {
                   border: "0.5px solid var(--color-separator)",
                 }}
               >
-                {c}
+                {c === "Tous" ? t.archive.all[lang] : c}
               </button>
             );
           })}
         </div>
         <div className="micro-sm flex items-center gap-4 text-fg-3">
-          <span>Trier par</span>
+          <span>{t.archive.sort[lang]}</span>
           {(["year", "title"] as const).map((s) => (
             <button
               key={s}
@@ -84,7 +86,7 @@ export default function ArchiveTable({ projects }: { projects: Project[] }) {
                 textUnderlineOffset: "4px",
               }}
             >
-              {s === "year" ? "ANNÉE" : "TITRE"}
+              {s === "year" ? t.archive.year[lang] : t.archive.title[lang]}
             </button>
           ))}
         </div>
@@ -99,7 +101,7 @@ export default function ArchiveTable({ projects }: { projects: Project[] }) {
           borderColor: "var(--color-separator)",
         }}
       >
-        {["№", "Titre", "Catégorie", "Année", "Client", ""].map((h, i) => (
+        {["№", t.archive.col_title[lang], t.archive.col_category[lang], t.archive.col_year[lang], "Client", ""].map((h, i) => (
           <div key={i} className="micro-sm text-fg-3">
             {h}
           </div>
@@ -138,7 +140,7 @@ export default function ArchiveTable({ projects }: { projects: Project[] }) {
                 aria-hidden
                 className="text-right text-lg text-fg-4 transition-[transform,color] duration-200 group-hover:translate-x-1 group-hover:text-accent"
               >
-                ↗
+                ↗︎
               </span>
             </div>
 

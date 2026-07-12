@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { services } from "@/data/services";
 import { useTheme } from "@/lib/theme";
 import { useLiteMode } from "@/lib/lite-mode";
+import { useLang, t } from "@/lib/language";
 import { Reveal } from "@/components/ui/Reveal";
 
 const BlobScene = dynamic(() => import("@/components/three/BlobScene"), { ssr: false });
@@ -23,6 +24,7 @@ const CHIPS: Record<string, string[]> = {
 export default function HomeServices() {
   const { theme } = useTheme();
   const lite = useLiteMode();
+  const { lang } = useLang();
   const wireframeColor = theme === "dark" ? "#2391ff" : "#ff6a00";
   const sectionRef = useRef<HTMLElement>(null);
   const [blobVisible, setBlobVisible] = useState(false);
@@ -61,7 +63,7 @@ export default function HomeServices() {
       <div className="relative z-[1] mx-auto max-w-6xl">
         <Reveal>
           <div className="flex items-baseline justify-between">
-            <span className="micro text-fg-3">⌗ Services</span>
+            <span className="micro text-fg-3">{t.services.section[lang]}</span>
           </div>
           <div className="hairline mt-3" />
         </Reveal>
@@ -75,7 +77,7 @@ export default function HomeServices() {
             <span className="text-accent">.</span>
           </h2>
           <Link href="/services" className="micro pb-3 text-fg-2 transition-colors hover:text-accent hidden md:block">
-            Tous les services →︎
+            {t.services.all_link[lang]}
           </Link>
         </Reveal>
 
@@ -142,7 +144,7 @@ export default function HomeServices() {
             href="/services"
             className="flex w-full items-center justify-center gap-3 bg-accent py-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-white transition-colors hover:bg-accent-hover"
           >
-            TOUS LES SERVICES <span aria-hidden>→︎</span>
+            {t.services.all_btn[lang]} <span aria-hidden>→︎</span>
           </Link>
         </div>
       </div>
