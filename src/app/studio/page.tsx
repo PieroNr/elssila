@@ -6,9 +6,17 @@ import MarqueeBand from "@/components/studio/MarqueeBand";
 import Approach from "@/components/studio/Approach";
 
 export const metadata: Metadata = {
-  title: "Studio — Elssila",
+  title: "Studio — À propos de Lisa Eymard",
   description:
-    "Studio indépendant fondé en 2019 à Paris. Direction artistique, photographie, film, web & 3D. Trois à cinq projets par an, jamais plus.",
+    "Lisa Eymard, vidéaste, photographe et directrice artistique indépendante basée à Lyon. Diplômée en direction artistique et réalisation audiovisuelle.",
+  alternates: { canonical: "https://elssila.com/studio" },
+  openGraph: {
+    title: "Studio — Lisa Eymard | Elssila",
+    description:
+      "Vidéaste, photographe et directrice artistique indépendante basée à Lyon.",
+    url: "https://elssila.com/studio",
+    images: [{ url: "/studio/photo-color.jpg", width: 1200, height: 630, alt: "Lisa Eymard — Elssila" }],
+  },
 };
 
 export default function StudioPage() {

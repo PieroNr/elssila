@@ -41,7 +41,7 @@ export default function ArchiveTable({ projects }: { projects: Project[] }) {
       l = [...l].sort((a, b) => a.title.localeCompare(b.title));
     }
     return l;
-  }, [filter, sort]);
+  }, [filter, sort, projects]);
 
   const hovered = projects.find((p) => p.slug === hoverSlug);
 

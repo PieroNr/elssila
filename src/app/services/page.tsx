@@ -3,9 +3,16 @@ import { PageFooter } from "@/components/home/HomeFooter";
 import ServicesSplit from "@/components/services/ServicesSplit";
 
 export const metadata = {
-  title: "Services — Elssila Studio",
+  title: "Services — Studio audiovisuel à Lyon",
   description:
-    "Quatre disciplines : direction artistique, production visuelle, expériences digitales, stratégie de contenu.",
+    "5 services audiovisuels à Lyon : direction artistique, pré-production, tournage, post-production et photographie. Disponible partout en France.",
+  alternates: { canonical: "https://elssila.com/services" },
+  openGraph: {
+    title: "Services audiovisuels — Elssila | Lyon",
+    description:
+      "Direction artistique, pré-production, tournage, post-production et photographie à Lyon.",
+    url: "https://elssila.com/services",
+  },
 };
 
 export default function ServicesPage() {

@@ -2,10 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// Live seismograph — animated SVG polyline driven by RAF. The trace is a
-// stack of sin waves with bell-curve "spikes" added in for character. Pauses
-// when the tab is hidden, when reduced motion is requested, and on lite-mode.
-
 function detectLiteMode(): boolean {
   if (typeof window === "undefined") return false;
   const nav = navigator as Navigator & { deviceMemory?: number };
@@ -17,9 +13,10 @@ function detectLiteMode(): boolean {
   );
 }
 
+// Step of 6 instead of 4 → 100 points instead of 150, same visual result.
 function buildPath(phase: number): string {
   const pts: string[] = [];
-  for (let x = 0; x < 600; x += 4) {
+  for (let x = 0; x < 600; x += 6) {
     const t = (x + phase) * 0.04;
     const spike =
       Math.sin(t * 7.3) *
@@ -31,13 +28,17 @@ function buildPath(phase: number): string {
   return pts.join(" ");
 }
 
+// Throttle RAF to ~30fps — imperceptible on a seismograph trace.
+let _lastTs = 0;
+const FPS = 30;
+const INTERVAL = 1000 / FPS;
+
 export default function SeismographLive() {
   const polyRef = useRef<SVGPolylineElement>(null);
   const [staticTrace, setStaticTrace] = useState<string>(() => buildPath(0));
 
   useEffect(() => {
     if (detectLiteMode()) {
-      // Render a single frozen frame and bail out — no RAF.
       setStaticTrace(buildPath(0));
       return;
     }
@@ -46,13 +47,15 @@ export default function SeismographLive() {
     let phase = 0;
     let running = true;
 
-    const tick = () => {
+    const tick = (ts: number) => {
       if (!running) return;
-      phase += 1;
+      rafId = requestAnimationFrame(tick);
+      if (ts - _lastTs < INTERVAL) return;
+      _lastTs = ts;
+      phase += 2;
       if (polyRef.current) {
         polyRef.current.setAttribute("points", buildPath(phase));
       }
-      rafId = requestAnimationFrame(tick);
     };
 
     const onVisibility = () => {
