@@ -82,7 +82,8 @@ export default function HomeServices() {
         {/* Desktop: vertical list */}
         <ul className="mt-10 hidden md:mt-14 md:block">
           {services.map((s, i) => (
-            <Reveal key={s.id} delay={i * 0.07} className={i === 0 ? "border-t border-[var(--color-separator)]" : undefined}>
+            <li key={s.id} className="list-none">
+            <Reveal delay={i * 0.07} className={i === 0 ? "border-t border-[var(--color-separator)]" : undefined}>
               <Link
                 href="/services"
                 className="srow group grid items-baseline gap-8 border-b border-[var(--color-separator)] py-8 transition-[padding,background] duration-300"
@@ -114,6 +115,7 @@ export default function HomeServices() {
                 </motion.span>
               </Link>
             </Reveal>
+            </li>
           ))}
         </ul>
 

@@ -1,7 +1,8 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF, Environment, useAnimations } from "@react-three/drei";
+import { useGLTF, useAnimations } from "@react-three/drei";
+import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import type { Group, Mesh } from "three";
@@ -25,28 +26,65 @@ function DanceModel({
   const { scene, animations } = useGLTF("/models/Dance.glb");
   const { actions } = useAnimations(animations, group);
   const materialsRef = useRef<THREE.MeshStandardMaterial[]>([]);
+  const depthMeshesRef = useRef<THREE.Mesh[]>([]);
 
-  // Apply wireframe materials + signal ready so canvas fades in after first paint
   useEffect(() => {
     const mats: THREE.MeshStandardMaterial[] = [];
-    scene.traverse((child) => {
-      if ((child as Mesh).isMesh) {
-        const mesh = child as Mesh;
-        const mat = new THREE.MeshStandardMaterial({
-          wireframe: true,
-          color,
-          emissive: color,
-          emissiveIntensity: 0.3,
-          roughness: 0.4,
-          metalness: 0.1,
-        });
-        mesh.material = mat;
-        mats.push(mat);
+    const depthMeshes: THREE.Mesh[] = [];
+
+    const meshes: THREE.Mesh[] = [];
+    scene.traverse((child) => { if ((child as Mesh).isMesh) meshes.push(child as Mesh); });
+
+    for (const mesh of meshes) {
+      // Invisible depth mesh — must be SkinnedMesh for animated characters
+      // so it deforms with the bones and doesn't produce artifacts
+      const depthMat = new THREE.MeshBasicMaterial({
+        colorWrite: false,
+        side: THREE.FrontSide,
+      });
+
+      let depthMesh: THREE.Mesh;
+      if (mesh instanceof THREE.SkinnedMesh) {
+        const sm = new THREE.SkinnedMesh(mesh.geometry, depthMat);
+        sm.skeleton = mesh.skeleton;
+        sm.bindMatrix.copy(mesh.bindMatrix);
+        sm.bindMatrixInverse.copy(mesh.bindMatrixInverse);
+        sm.bindMode = mesh.bindMode;
+        depthMesh = sm;
+      } else {
+        depthMesh = new THREE.Mesh(mesh.geometry, depthMat);
       }
-    });
+      depthMesh.renderOrder = 0;
+      mesh.add(depthMesh);
+      depthMeshes.push(depthMesh);
+
+      const wireMat = new THREE.MeshStandardMaterial({
+        wireframe: true,
+        color,
+        emissive: color,
+        emissiveIntensity: 0.9,
+        roughness: 0.5,
+        metalness: 0,
+        polygonOffset: true,
+        polygonOffsetFactor: -1,
+        polygonOffsetUnits: -1,
+      });
+      mesh.material = wireMat;
+      mesh.renderOrder = 1;
+      mats.push(wireMat);
+    }
+
     materialsRef.current = mats;
+    depthMeshesRef.current = depthMeshes;
     onReady();
-    return () => { mats.forEach((m) => m.dispose()); };
+
+    return () => {
+      mats.forEach((m) => m.dispose());
+      depthMeshes.forEach((m) => {
+        m.parent?.remove(m);
+        (m.material as THREE.Material).dispose();
+      });
+    };
   }, [scene]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Sync color on theme switch
@@ -57,7 +95,7 @@ function DanceModel({
     });
   }, [color]);
 
-  // Play the first embedded animation (the dance clip)
+  // Play the first embedded animation
   useEffect(() => {
     const firstKey = Object.keys(actions)[0];
     const action = firstKey ? actions[firstKey] : null;
@@ -68,14 +106,14 @@ function DanceModel({
     return () => { action?.stop(); };
   }, [actions]);
 
-  // Slow Y-axis rotation complements the dance animation
+  // Slow Y-axis rotation
   useFrame((_, delta) => {
     if (!animate || !group.current) return;
     group.current.rotation.y += delta * 0.04;
   });
 
   return (
-    <group ref={group} position={[0, -1, 0]} scale={0.3}>
+    <group ref={group} position={[0, -1, 0]} scale={0.3} rotation={[0, Math.PI, 0]}>
       <primitive object={scene} />
     </group>
   );
@@ -83,8 +121,7 @@ function DanceModel({
 
 useGLTF.preload("/models/Dance.glb");
 
-export default function BustScene({ animate, wireframeColor = "#3aa9ff" }: BustSceneProps) {
-  // Gate visibility on model ready to prevent white-material flash on first paint
+export default function BustScene({ animate, wireframeColor = "#2391ff" }: BustSceneProps) {
   const [modelReady, setModelReady] = useState(false);
   const visible = animate && modelReady;
   const canvasStyle = {
@@ -98,16 +135,37 @@ export default function BustScene({ animate, wireframeColor = "#3aa9ff" }: BustS
     <Canvas
       camera={{ position: [0, 7, 40], fov: 55 }}
       dpr={[1, 1.5]}
-      gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}
+      gl={{
+        alpha: true,
+        antialias: false,
+        powerPreference: "high-performance",
+        toneMapping: THREE.ACESFilmicToneMapping,
+        toneMappingExposure: 1.2,
+      }}
       style={canvasStyle}
     >
-      <ambientLight intensity={0.4} />
-      <Environment preset="studio" environmentIntensity={0.3} />
+      {/* Ambient basse pour maximiser le contraste clair/sombre */}
+      <ambientLight intensity={0.12} />
+      {/* Point lights colorés — maintiennent la teinte bleue dans les zones d'ombre */}
+      <pointLight position={[-6, 12, 10]} intensity={1.4} color={wireframeColor} distance={60} decay={2} />
+      <pointLight position={[8, -4, 8]} intensity={0.8} color={wireframeColor} distance={60} decay={2} />
+      {/* Key light blanche forte — crée les zones très claires (presque blanc) sur le dessus */}
+      <directionalLight position={[-6, 16, 14]} intensity={3.5} color="#ffffff" />
+      {/* Fill light blanche secondaire — éclaircit légèrement le côté droit */}
+      <directionalLight position={[10, 4, 8]} intensity={1.2} color="#ffffff" />
       <DanceModel
         color={wireframeColor}
         animate={animate}
         onReady={() => setModelReady(true)}
       />
+      <EffectComposer multisampling={0}>
+        <Bloom
+          luminanceThreshold={0.4}
+          luminanceSmoothing={1}
+          intensity={4}
+          radius={0.7}
+        />
+      </EffectComposer>
     </Canvas>
   );
 }

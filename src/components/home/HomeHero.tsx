@@ -157,9 +157,9 @@ function Showreel() {
           />
         ) : (
           <>
-            {/* YouTube thumbnail */}
+            {/* YouTube thumbnail — served locally to avoid 3rd-party cookies on load */}
             <img
-              src="https://img.youtube.com/vi/oUt0rwGF37k/maxresdefault.jpg"
+              src="/showreel-thumb.jpg"
               alt="Showreel Elssila Studio"
               className="absolute inset-0 h-full w-full object-cover"
             />
