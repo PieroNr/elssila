@@ -45,50 +45,66 @@ export default function ArchiveTable({ projects }: { projects: Project[] }) {
     return l;
   }, [filter, sort, projects]);
 
+  const counts = useMemo<Record<string, number>>(() => {
+    const c: Record<string, number> = { Tous: projects.length };
+    for (const p of projects) c[p.category] = (c[p.category] ?? 0) + 1;
+    return c;
+  }, [projects]);
+
   const hovered = projects.find((p) => p.slug === hoverSlug);
 
   return (
     <>
       {/* Filters */}
-      <div className="mt-14 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex flex-wrap gap-1">
-          {PROJECT_CATEGORIES.map((c) => {
-            const sel = c === filter;
-            return (
+      <div
+        className="mt-14 border-y py-5"
+        style={{ borderColor: "var(--color-separator)" }}
+      >
+        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+            <span className="micro text-fg-2">{t.archive.filter[lang]}</span>
+            <div className="flex flex-wrap gap-2" role="group" aria-label={t.archive.filter[lang]}>
+              {PROJECT_CATEGORIES.map((c) => {
+                const sel = c === filter;
+                const count = counts[c] ?? 0;
+                return (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => setFilter(c)}
+                    aria-pressed={sel}
+                    className={`micro flex h-9 items-center gap-2 rounded-full border px-4 leading-none transition-colors ${
+                      sel
+                        ? "border-accent bg-accent font-bold text-white"
+                        : "border-fg-3 text-fg hover:border-accent hover:text-accent"
+                    }`}
+                  >
+                    <span>{c === "Tous" ? t.archive.all[lang] : c}</span>
+                    <span className={sel ? "opacity-80" : "text-fg-3"}>{count}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          <div className="micro flex items-center gap-4 text-fg-3">
+            <span>{t.archive.sort[lang]}</span>
+            {(["year", "title"] as const).map((s) => (
               <button
-                key={c}
+                key={s}
                 type="button"
-                onClick={() => setFilter(c)}
-                className="micro-sm transition-colors"
+                onClick={() => setSort(s)}
+                aria-pressed={sort === s}
+                className="micro transition-colors hover:text-accent"
                 style={{
-                  padding: "8px 14px",
-                  background: sel ? "var(--color-fg)" : "transparent",
-                  color: sel ? "var(--color-page)" : "var(--color-fg-2)",
-                  border: "0.5px solid var(--color-separator)",
+                  color: sort === s ? "var(--color-accent)" : undefined,
+                  textDecoration: sort === s ? "underline" : "none",
+                  textUnderlineOffset: "4px",
                 }}
               >
-                {c === "Tous" ? t.archive.all[lang] : c}
+                {s === "year" ? t.archive.year[lang] : t.archive.title[lang]}
               </button>
-            );
-          })}
-        </div>
-        <div className="micro-sm flex items-center gap-4 text-fg-3">
-          <span>{t.archive.sort[lang]}</span>
-          {(["year", "title"] as const).map((s) => (
-            <button
-              key={s}
-              type="button"
-              onClick={() => setSort(s)}
-              className="micro-sm transition-colors"
-              style={{
-                color: sort === s ? "var(--color-accent)" : "var(--color-fg-3)",
-                textDecoration: sort === s ? "underline" : "none",
-                textUnderlineOffset: "4px",
-              }}
-            >
-              {s === "year" ? t.archive.year[lang] : t.archive.title[lang]}
-            </button>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 

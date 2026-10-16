@@ -62,6 +62,7 @@ export const t = {
     all_btn:  { fr: "TOUS LES SERVICES",    en: "ALL SERVICES" },
   },
   archive: {
+    filter:   { fr: "Filtrer", en: "Filter" },
     sort:     { fr: "Trier par", en: "Sort by" },
     year:     { fr: "ANNÉE",     en: "YEAR" },
     title:    { fr: "TITRE",     en: "TITLE" },
